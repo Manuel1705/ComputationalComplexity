@@ -481,4 +481,22 @@ If $M$ decides $L$ in space $f(n)$, with $f$ being a proper function then exists
   Proof for 1 tape: concatenates $M_f$ and a simulation of $M$. The last tape of $M_f$ is used as a yardstick. This tape will contain a cell in which we have the symbol representing the current state, it can contain $|K|$ different symbols. Then the next $f(n)$ cells will contain the symbols of $\Sigma$ (represented by an integer in base $|\Sigma|$). The last ($f(n)+1$) cells will be used as an unary representation of the cursor position.
   At every transition of $M$ we increment the counter and if in at most $c$ steps $M$ has not halted, we can force it to halt in "no".
 \end{proof}
+
+From this theorem we ca conclude that if the space is finite then the machine will halt. Another important result is that time is exponentially bigger than space. 
+
+\section{Complexity Classes}
+\section{Complexity Classes}
+\[
+\begin{aligned}
+    &\text{TIME}(n^k) && = \bigcup_{j > 0} \text{TIME}(n^j)  &&= \textbf{P}, \\
+    &\text{NTIME}(n^k) && = \bigcup_{j > 0} \text{NTIME}(n^j)  &&= \textbf{NP}, \\
+    &\text{TIME}(2^{n^k}) && = \bigcup_{j > 0} \text{TIME}(2^{n^j})  &&= \textbf{EXP}, \\
+    &\text{SPACE}(n^k) && = \bigcup_{j > 0} \text{SPACE}(n^j)  &&= \textbf{PSPACE}, \\
+    &\text{NSPACE}(n^k) && = \bigcup_{j > 0} \text{NSPACE}(n^j) && = \textbf{NPSPACE}, \\
+    &\text{SPACE}(\log n) &&&& = \textbf{L}, \\
+    &\text{NSPACE}(\log n) &&&& = \textbf{NL}.
+\end{aligned}
+\]
+\section{Complementari Complexity Classes}
+
 \end{document}
