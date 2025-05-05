@@ -469,4 +469,16 @@ If $M$ is nondeterministic, then precisely the same amount of time or space is u
 
 In the case of space-bounded machines, the ``space yardstick'' can be used by $M'$ to also ``count'' steps in an appropriate base representing the size of the alphabet of $M$, and thus $M'$ will never indulge in a meaninglessly long computation. Thus, we can assume that space-bounded machines always halt.
 \end{proof}
+
+\begin{defbox}[Theorem (Termination of TM space bounded)]
+If $M$ decides $L$ in space $f(n)$, with $f$ being a proper function then exists a Turing machine $M'$ that decides $L$ in space $O(f(n))$ and such that every computation halts.
+\end{defbox}
+\begin{proof}
+  If $M$ works in space $f(n)$, then the set of different configurations in which it can go through is finite. 
+  Upper bounder by 
+  $$c=|K|\times|\Sigma|^{f(n)}\times (f(n)+1)$$
+  If $M$ makes more than $c$ steps, then it must have repeated a configuration and so it must be in a loop. If $M$ doesn't halt in at most $c$ steps we can force termination in "no".
+  Proof for 1 tape: concatenates $M_f$ and a simulation of $M$. The last tape of $M_f$ is used as a yardstick. This tape will contain a cell in which we have the symbol representing the current state, it can contain $|K|$ different symbols. Then the next $f(n)$ cells will contain the symbols of $\Sigma$ (represented by an integer in base $|\Sigma|$). The last ($f(n)+1$) cells will be used as an unary representation of the cursor position.
+  At every transition of $M$ we increment the counter and if in at most $c$ steps $M$ has not halted, we can force it to halt in "no".
+\end{proof}
 \end{document}
