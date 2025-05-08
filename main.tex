@@ -496,6 +496,104 @@ From this theorem we ca conclude that if the space is finite then the machine wi
     &\text{NSPACE}(\log n) &&&& = \textbf{NL}.
 \end{aligned}
 \]
+\subsection{Exercises}
+\begin{itemize}
+  \item $TIME(n^3)\subseteq EXP$? Yes
+  \item $TIME(n^3)\subseteq P$? Yes
+  \item $EXP\subseteq P$? No (there is a theorem that proves it)
+  \item $P\subseteq NTIME(n^k)$? Yes, because $P\subseteq NP$.
+  \item $NTIME(n^k)\subseteq P$? We don't know.
+  \item $NTIME(n^k)\subseteq NP$? Yes, because $NTIME(n^k)=NP$.
+  \item $TIME(2^{n^2})\subseteq EXP$? Yes, because $EXP = \bigcup\limits_{k > 0} TIME(2^{n^k})$.
+  \item $NTIME(n^2)\subseteq EXP$? Yes, because 
+  $$NTIME(n^2)\subseteq TIME(k^{n^2})=TIME(2^{(log_2k)n^2})\subseteq TIME(2^{n^3})\subseteq EXP$$ to switch from nondeterministic to deterministic we used the theorem that says that nondeterministic Turing machines can be simulated by deterministic Turing machines with an exponential loss of efficiency.
+  \item $PSPACE\subseteq SPACE(n^k)$? Yes, because $PSPACE = \bigcup\limits_{k > 0} SPACE(n^k)$.
+  \item $PSPACE\subseteq NPSPACE$? Yes, because deterministic Turing machines are a subset of nondeterministic Turing machines.
+  \item $SPACE(2^n)\subseteq SPACE(2^{n^2})$? Yes
+  \item $SPACE(n)\subseteq NSPACE(n)$? Yes
+  \item $NPSPACE\subseteq PSPACE$? Yes, (proven by Savitch corollary)
+  \item $TIME(n^k)\subseteq PSPACE$? Yes, because $TIME(n^k)\subseteq SPACE(n^k) = PSPACE$, obviously if we have a Turing machine that works in time $n^k$ then it will use at most $n^k$ space.
+  \item $PSPACE\subseteq EXP$? Yes, because we can upper bound time number of computations by $c= |k|\times|\Sigma|^{f(n)}\times f(n)$ which is exponential in $f(n)$.
+  \item $NP\subseteq PSPACE$? Yes, because we can prove that any $NP$ problem can be solved in polynomial space.
+\end{itemize}
 \section{Complementary Complexity Classes}
+When we first defined nondeterministic computation, we were struck by an asymmetry in the way ``yes'' and ``no'' inputs are treated. For a string to be established as a string in the language (a ``yes'' input), one successful computational path is enough. In contrast, for a string not in the language, all computational paths must be unsuccessful. 
+
+\begin{defbox}[Complement of a Language]
+  
+  Let $L \subseteq \Sigma^*$ be a language. The \textit{complement} of $L$, denoted $\overline{L}$, is the language $\Sigma^* - L$, that is, the set of all strings in the appropriate alphabet that are not in $L$. We now extend this definition to decision problems. The complement of a decision problem $A$, usually called \textit{A complement}, will be defined as the decision problem whose answer is ``yes'' whenever the input is a ``no'' input of $A$, and vice versa. 
+\end{defbox}
+  
+For example, \textit{SAT complement} is this problem: Given a Boolean expression $\phi$ in conjunctive normal form, is it \textit{unsatisfiable}? \textit{Hamilton path complement} is the following: Given a graph $G$, is it true that $G$ \textit{does not} have a Hamilton path? And so on. Notice that, strictly speaking, the languages corresponding to the problems \textit{Hamilton path} and \textit{Hamilton path complement}, for example, are not complements of one another, as their union is not $\Sigma^*$ but rather the set of all strings that encode graphs; this is of course another convenient convention with no deep consequences.
+
+\begin{defbox}[Complementary Complexity Class]
+  
+  For any complexity class $C$, $\textbf{co}C$ denotes the class $\{\overline{L} : L \in C\}$. It is immediately obvious that if $C$ is a deterministic time or space complexity class, then $C = \textbf{co}C$; that is, \textit{all deterministic time and space complexity classes are closed under complement}. The reason is that any deterministic Turing machine deciding $L$ within a time or space bound can be converted to a deterministic Turing machine that decides $\overline{L}$ within the same time or space bound: The same machine with the roles of ``yes'' and ``no'' reversed. But it is an important open problem whether nondeterministic time complexity classes are close under complement. For nondeterministic space complexity classes we can prove closure under complement, but we will see that later. 
+\end{defbox}
+\section{The Hierarchy Theorem}
+We shall assume that, although a machine may have an arbitrary alphabet, the languages of interest, and therefore the inputs $x$, contain the symbols used for encoding Turing machines (0, 1, ``('', ``;'', etc.). This is no loss of generality, since languages over different alphabets obviously have identical complexity properties, as long as these alphabets contain at least two symbols. We represent the states and the alphabet symbols of turing machines as integers:
+\begin{itemize}
+\item$\Sigma\rightsquigarrow\{1,\dots,|\Sigma|\}$
+\item $K\rightsquigarrow\{|\Sigma|+1,\dots,|\Sigma|+|K|\}$
+\item $\{\la,\ra,-,h,\text{"yes"},\text{"no"}\}\rightsquigarrow\{|\Sigma|+|K|+1,\dots,|\Sigma|+|K|+6\}$ 
+\end{itemize}
+Every integer is represented in binary, with strings of length $log(|\Sigma|+|K|+6)$. We denote with $\underline i$ the binary encoding of the integer $i$, with $\underline q$ the encoding of the state $q\in K$ and with $\sigma$ the encoding of the symbol $\sigma\in\Sigma$.
+Codifica di $(q, \sigma, q', \sigma', D) \in \Delta$:$(\underline q,\underline \sigma,\underline q',\underline \sigma',\underline D)$.
+ Codifica di  $\Delta$, denotata con $\Delta$:$ (\underline q_1,\underline \sigma_1,\underline q_1',\underline \sigma_1',\underline D_1), \dots, (\underline q_m,\underline \sigma_m,\underline q_m',\underline \sigma_m',\underline D_m) \quad (m = |\Delta|)$. Codifica di $M$, denotata con $\underline M$:$  |\underline\Sigma|, |\mathcal{\underline K}|,\underline \Delta$.
+ 
+\begin{defbox}[Universla Turgin Machine]
+  There exist a \textbf{universal} turing machine $U$ that given the string $\underline M;x$ can simulate $M$ on input $x$. We describe $U$ as a two tape turing machine since we know that it can be reduced to a one tape turing machine with just a quadratic slowdown. $U$ keeps the configuration of $M$ on the second tape with such a format: $(\underline{w, q, u})$ where $w$ is the left side of the string with respect to the cursor, $q$ is the state of the machine and $u$ is the right side of the string. $U$ simulates $M$ with the following steps: searches for the encoding of the current state $q$ in the second tape, then it searches in the first tape for a tuple $(q,\sigma,\dots)$ starting with the $q$ state. Then it keeps moving left on the second string until it reaches the left and of $w$ to verifies that the cursor is under the symbol $\sigma$. If this is true then it writes the new symbol $\sigma'$ in the first tape and moves the cursor according to $D$ otherwise searches for the next tuple starting with $q$ and keeps repeating these steps. If it finds an encoding error for $\underline M$ it keeps moving the cursor to the right forever (diverging).
+  \end{defbox}
+In this section, we prove a \textit{quantitative hierarchy result}: With sufficiently greater time allocation, Turing machines are able to perform more complex computational tasks. Predictably, our proof will employ a quantitative sort of diagonalization.
+
+Let $f(n) \geq n$ be a proper complexity function, and define $H_f$ to be the following time-bounded version of the \textit{halting} language $H$:
+\[
+H_f = \{M; x \;|\; M \text{ accepts input } x \text{ after at most } f(|x|) \text{ steps}\},
+\]
+where $M$ in the definition of $H_f$ ranges over all descriptions of deterministic multi-string Turing machines. 
+
+\begin{defbox}[Lemma (complexity upper bound of \texorpdfstring{$H_f$}{Hf})]
+$$H_f\in TIME(f(n)^3)$$
+\end{defbox}
+\begin{proof}
+  We shall describe a Turing machine $U_f$ with four strings, which decides $H_f$ in time $(f(n))^3$. $U_f$ is based on several machines that we have seen previously: The universal Turing machine $U$; the single-string simulator of multi-string machines; the linear speedup theorem machine that shaves constants off the time bound; and the ,machine $M_f$ that computes a "yardstick" of length precisely $f(n)$, which exists because we are assuming that $f$ is a proper complexity function. First, $U_f$ uses $M_f$ on the second part of its input, $x$, to initialize on its fourth string an appropriate ``alarm clock'' $\triangleright \sqcup^{f(|x|)}$, to be used during the simulation of $M$. (Here we assume that $M_f$ has at most four strings; if not, the number of strings of $U_f$ has to be increased accordingly.) $M_f$ operates within time $\mathcal{O}(f(|x|))$ (where the constant depends on $f$ alone, and not on $x$ or $M$). $U_f$ also copies the description of the machine $M$ to be simulated on its third string, and converts $x$ on its first string to the encoding of $\triangleright x$ (that is, it removes $\underline M$ from the first string and adds a $\tr$ at the beginning of $x$). The second string is initialized to the encoding of the initial state $s$ (that is, it replaces $(\underline{w,q,u})$ with only $\underline q$). We can also at this point check that indeed $\underline M$ is the description of a legitimate Turing machine, and reject if it is not (this requires linear time using two strings). The total time required so far is $\mathcal{O}(f(|x|) + n) = \mathcal{O}(f(n))$ where $n$ is the size of the input $\underline M;x$.
+
+  The main operation of $U_f$ starts after this initial stage. Like the $U$ we defined before (universal turing machine), $U_f$ simulates one-by-one the steps of $M$ on input $x$. The simulation is confined in the first string, where the encodings of the contents of all strings of $M$ are kept. Each step of $M$ is simulated by two successive scans of the first string of $U_f$. During the first scan, $U_f$ collects all relevant information concerning the currently scanned symbols of $M$, and writes this information on the second string. The second string also contains the encoding of the current state. $U_f$ then matches the contents of the second string with those of the third (containing the description of $M$) to find the appropriate transition of $M$. $U_f$ goes on to perform the appropriate changes to its first string, in a second pass. It also advances its ``alarm clock'' by one.
+  
+  $U_f$ simulates each step of $M$ in time $\mathcal{O}(\ell_M k_M^2 f(|x|))$, where $k_M$ is the number of strings of $M$, and $\ell_M$ is the length of the description of each state and symbol of $M$. Since, for legitimate Turing machines, these quantities are bounded above by the logarithm of the length of the description of the machine, the time to simulate each step of $M$ is $\mathcal{O}(f^2(n))$, where, once more, the constant does not depend on $M$.
+  
+  If $U_f$ finds that $M$ indeed accepts $x$ within $f(|x|)$ steps it accepts its input $M; x$. If not (that is, if $M$ rejects $x$, or if the alarm clock expires) then $U_f$ rejects its input. The total time is $\mathcal{O}(f(n)^3)$. It can be easily made at most $f(n)^3$, by modifying $U_f$ to treat several symbols as one, as in the proof of the linear speedup theorem.
+\end{proof}
+
+\begin{defbox}[Lemma (complexity lower bound of \texorpdfstring{$H_f$}{Hf})]
+  $$H_f \notin \text{TIME}\left(f\left(\left\lfloor \frac{n}{2} \right\rfloor\right)\right)$$
+\end{defbox}
+\begin{proof}
+  Suppose for the sake of contradiction, that there is a Turing machine $M_{H_f}$ that decides $H_f$ in time $f\left(\left\lfloor \frac{n}{2} \right\rfloor\right)$. This leads to the construction of a ``diagonalizing'' machine $D_f$, with the following behavior:
+
+  \[
+  D_f(\underline M) : \text{if } M_{H_f}(\underline M;\underline M) = \text{``yes'' then ``no'' else ``yes''}.
+  \]
+  
+  $D_f$ on input $\underline M$ runs in the same time as $M_{H_f}$ on input $\underline M; \underline M$, that is, in time 
+  \[
+  f\left(\left\lfloor \frac{2n+1}{2} \right\rfloor\right) = f(n).
+  \]
+  
+  Does then $D_f$ accept its own description? Suppose that $D_f(\underline D_f) = \text{``yes''}$. This means that $M_{H_f}(\underline D_f;\underline D_f) = \text{``no''}$, or, equivalently, $\underline D_f;\underline D_f \notin H_f$. By the definition of $H_f$, this means that $D_f$ fails to accept its own description in $f(n)$ steps, and, since we know that $D_f$ always accepts or rejects its input within $f(n)$ steps, $D_f(\underline D_f) = \text{``no''}$. 
+  
+  Similarly, $D_f(\underline D_f) = \text{``no''}$ implies $D_f(\underline D_f) = \text{``yes''}$, and our assumption that $H_f \in \text{TIME}\left(f\left(\left\lfloor \frac{n}{2} \right\rfloor\right)\right)$ has led us to a contradiction.
+\end{proof}
+
+\begin{defbox}[The Time Hierarchy Theorem]
+  
+  If $f(n) \geq n$ is a proper complexity function, then the class $\text{TIME}(f(n))$ is strictly contained within $\text{TIME}((f(2n+1))^3)$.
+\end{defbox}
+\begin{proof}
+  
+\end{proof}
+
+
+
 
 \end{document}
