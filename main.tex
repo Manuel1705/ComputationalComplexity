@@ -590,10 +590,127 @@ $$H_f\in TIME(f(n)^3)$$
   If $f(n) \geq n$ is a proper complexity function, then the class $\text{TIME}(f(n))$ is strictly contained within $\text{TIME}((f(2n+1))^3)$.
 \end{defbox}
 \begin{proof}
+  Since $f(n)$ is a proper complexity function and $f(n)\ge n$, we have that 
+  $$f(n)\le f(2n+1)\le f(2n+1)^3$$
+  and so $TIME(f(n))\subseteq TIME(f(2n+1)^3)$. 
   
+  To prove the strict inclusion, we shall dimostrate that for an appropriate $g$, 
+  $$H_g \in TIME(f(2n+1)^3) \text{ but } H_g \notin TIME(f(n))$$ 
+ Let $g(n) = f(2n + 1)$. Notice that
+    \[
+        2\left\lfloor \frac{n}{2} \right\rfloor + 1 =
+        \begin{cases}
+            n + 1 & \text{se $n$ pari} \\
+            n     & \text{se $n$ dispari}
+        \end{cases}
+        \geq n
+    \]
+    since $f$ is a proper complexity function, it does not decrease.
+    \[
+        g\left(\left\lfloor \frac{n}{2} \right\rfloor\right) = f\left(2\left\lfloor \frac{n}{2} \right\rfloor + 1\right) \geq f(n)
+    \]
+    and so we have that
+    \[
+        \text{TIME}\left(g\left(\left\lfloor \frac{n}{2} \right\rfloor\right)\right) \supseteq \text{TIME}(f(n)).
+    \]
+    For lemma (2), $H_g \notin \text{TIME}(g(\left\lfloor n/2 \right\rfloor))$, and since $g\left(\left\lfloor \frac{n}{2} \right\rfloor\right)\ge f(n) \implies H_g \notin \text{TIME}(f(n))$.
+     Furthermore for lemma (1), $H_g \in \text{TIME}(g(n)^3) = \text{TIME}(f((2n+1)^3))$.
+\end{proof}
+\begin{defbox}
+  It has been proven that $$TIME(f(n))\subset TIME(f(n)\log^2f(n))$$
+\end{defbox}
+\begin{defbox}[Separation of P and EXP]
+  \textbf{P} is a proper subset of \textbf{EXP}
+  
+\end{defbox}
+\begin{proof}
+  Any polynomial will ultimately become smaller than $2^n$, and so 
+  $$\mathbf{P}\subseteq \textbf{TIME}(2^n)\subseteq \mathbf{EXP}$$
+  To prove proper inclusion, notice that, by the Time Hierarchy Theorem, $$\textbf{TIME}(2^n) \subset \textbf{TIME}((2^{2n+1})^3)  = \textbf{TIME}((2^{6n+3}))\subseteq \textbf{TIME}(2^{n^2}) \subseteq \mathbf{EXP}$$
 \end{proof}
 
+\begin{defbox}[The Space Hierarchy Theorem]
+  If $f$ is a proper complexity function, then $$\textbf{SPACE}(f(n))\subset \textbf{SPACE}(f(n)\log f(n))$$
+\end{defbox}
 
+\section{Nondeterministic hierarchies}
+\begin{itemize}
+  \item $\textbf{NTIME}(n^c)\subset\textbf{NTIME}(n^d)$ for all the constants $1\le c<d$.
+  \item for all increasing functions $h$ (doesn't matter how slow):
+  \begin{itemize}
+    \item $\textbf{NSPACE}(\log n)\subset \textbf{NSPACE}(\log(n)\cdot h(n))$
+    \item $\textbf{NSPACE}(n^k)\subset \textbf{NSPACE}(n^k\cdot h(n))$
+    \item $\textbf{NSPACE}(2^n)\subset \textbf{NSPACE}(2^n\cdot h(n))$
+    \item $\textbf{NSPACE}(2^{2^n})\subset \textbf{NSPACE}(2^{2^{n+1}})$
+    \\
+    Notice how hierarchies are much more dense then the deterministic ones.
+  \end{itemize}
 
+\section{Time limit given space}
+\begin{defbox}
+  $$\textbf{TIME}(f(n))\subseteq\textbf{SPACE}(\frac{f(n)}{\log f(n)})$$
+\end{defbox}
+   If to sort an array we need $O(n\log n)$, then we can do it in $O(n)$ space. If we use more space, it means that we are wasting space. If a problem cannot be solved in polynomial space then it cannot be solved in polynomial time.
+\end{itemize}
 
+\section{Space limit given time}
+\begin{defbox}
+  $$\textbf{SPACE}(f(n))\subseteq\textbf{TIME}(k^{f(n)})$$
+\end{defbox}
+In particular, when $f(n)$ is a polynomial, this theorem implies
+$$\textbf{PSPACE}\subseteq\textbf{EXP}$$ 
+We don't know if the inclusion is strict, but many believe so. This is because \textbf{EXP} can use exponential space, tanks to the relation $\textbf{TIME}(f(n))\subseteq\textbf{SPACE}(f(n))$
+
+\section{Relation between deterministic and nondeterministic complexity classes}
+\begin{defbox}
+  $$\textbf{NTIME}(f(n))\subseteq\textbf{SPACE}(f(n))$$
+\end{defbox}
+\begin{proof}
+  Every possibile run of any nondeterministic Turing machine can be represented with a sequence of integers in the range $1,\ldots,d$ (where $d$ is the degree of nondeterminism). If $M$ runs in time $f(n)$, then every possibile run is at most $f(n)$ long and so is the space used. In the deterministic simulation we need to try every possibile run to see if at least one of them is accepted. We can use the same space for every possible run erasing the previous computation. The maximum space used is then the space used by the longest run plus the space used to enumerate the runs. The space used by the longest run is $O(f(n))$ and the space used to enumerate the runs is $O(f(n)\log d)=O(f(n))$.
+  So the total space used is $O(f(n))$.
+\end{proof}
+
+\begin{defbox}
+$$\textbf{NSPACE}(f(n))\subseteq\textbf{TIME}(k^{\log(n)+f(n)})$$  
+\end{defbox}
+\begin{proof}
+  omitted
+\end{proof}
+\begin{defbox}[Corollary]
+  $$\textbf{L}\subseteq\textbf{NL}\subseteq\textbf{P}\subseteq\textbf{NP}\subseteq\textbf{PSPACE}$$
+  
+\end{defbox}
+\subsection{Savitch's Theorem}
+\begin{defbox}
+  $$\textsl{REACHABILITY}\in\textbf{SPACE}(log^2n)$$
+\end{defbox}
+\begin{proof}
+  Let $G$ be a graph with $n$ nodes, let $x$ and $y$ be nodes of $G$, and let $i \geq 0$. We say that predicate $\mathrm{PATH}(x, y, i)$ holds if the following is true: There is a path from $x$ to $y$ in $G$, of length at most $2^i$. Notice immediately that, since a path in $G$ need be at most $n$ long, we can solve reachability in $G$ if we can compute whether $\mathrm{PATH}(x, y, \lceil \log n \rceil)$ for any two given nodes of $G$.
+
+We shall design a Turing machine, with two working strings besides its input string, which decides whether $\mathrm{PATH}(x, y, i)$. The adjacency matrix of $G$ is given at the input string. We assume that the first work string contains nodes $x$ and $y$ and integer $i$, all in binary. The first work string will typically contain several triples, of which the $(x, y, i)$ one will be the leftmost. The other work string will be used as scratch space---$\mathcal{O}(\log n)$ space will suffice there.
+
+We now describe how our machine decides whether $\mathrm{PATH}(x, y, i)$. If $i = 0$, we can tell whether $x$ and $y$ are connected via a path of length at most $2^0 = 1$ by simply checking whether $x = y$, or whether $x$ and $y$ are adjacent by looking at the input. This takes care of the $i = 0$ case. If $i \geq 1$, then we compute $\mathrm{PATH}(x, y, i)$ by the following recursive algorithm:
+\begin{quote}
+    for all nodes $z$ test whether $\mathrm{PATH}(x, z, i-1)$ and $\mathrm{PATH}(z, y, i-1)$
+\end{quote}
+This program implements a very simple idea: \textit{Any path of length $2^i$ from $x$ to $y$ has a midpoint $z$, and both $x$ and $y$ are at most $2^{i-1}$ away from this midpoint.}
+
+To implement this elegant idea in a space-efficient manner, we generate all nodes $z$, one after the other, reusing space. Once a new $z$ is generated, we add a triple $(x, z, i-1)$ to the main work string and start working on this problem, recursively. If a negative answer to $\mathrm{PATH}(x, z, i-1)$ is obtained, we erase this triple and move to the next $z$. If a positive answer is returned, we erase the triple $(x, z, i-1)$, write the triple $(z, y, i-1)$ on the work string (we consult $(x, y, i)$, the next triple to the left, to obtain $y$), and work on deciding whether $\mathrm{PATH}(z, y, i-1)$. If this is negative, we erase the triple and try the next $z$; if it is positive, we detect by comparing with triple $(x, y, i)$ to the left that this is the second recursive call, and return a positive answer to $\mathrm{PATH}(x, y, i)$. Notice that the first working string of the machine acts like a \textit{stack of activation records} to implement the recursion indicated above.
+
+It is clear that this algorithm implements the recursive one displayed above, and thus correctly solves $\mathrm{PATH}(x, y, i)$. The first work string contains at any moment $\lceil \log n \rceil$ or fewer triples, each of length at most $3 \log n$. And in order to solve $\textsl{REACHABILITY}$, we start this algorithm with $(x, y, \lceil \log n \rceil)$ written on the main work string. The last string used as a counter to enumerate the z nodes uses at most $\log n$.\\
+Total space used: $$\lceil \log n \rceil\cdot 3\log n+\log n = O(\log^2n)$$
+\end{proof}
+\begin{defbox}[Corollary]
+  For every proper complexity function $f(n)\ge\log n$
+  $$\textbf{NSPACE}(f(n))\subseteq\textbf{SPACE}(f^2(n))$$
+\end{defbox}
+\begin{proof}
+  We can solve reachability on the graph configurations using the Savitch's algorithm and then we can generate the configurations graph to save space. The space required is:
+  $$\log^2(c^{f(n)})=(\log(c^{f(n)}))^2=O(f(n)^2)=O(f^2(n))$$
+\end{proof}
+\begin{defbox}[Corollary]
+  Since we know that $\textbf{SPACE}(f(n))\subseteq\textbf{NSPACE}(f(n))$ and $\textbf{NSPACE}(f(n))\subseteq\textbf{SPACE}(f(n))$ when $f$ is polynomial, we can conclude that:
+  $$\textbf{PSPACE}=\textbf{NSPACE}$$
+  That is, nondeterminism does not extend the class of problems that can be solved in polynomial space.
+\end{defbox}
 \end{document}
