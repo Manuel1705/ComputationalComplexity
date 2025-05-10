@@ -709,8 +709,145 @@ Total space used: $$\lceil \log n \rceil\cdot 3\log n+\log n = O(\log^2n)$$
   $$\log^2(c^{f(n)})=(\log(c^{f(n)}))^2=O(f(n)^2)=O(f^2(n))$$
 \end{proof}
 \begin{defbox}[Corollary]
-  Since we know that $\textbf{SPACE}(f(n))\subseteq\textbf{NSPACE}(f(n))$ and $\textbf{NSPACE}(f(n))\subseteq\textbf{SPACE}(f(n))$ when $f$ is polynomial, we can conclude that:
+  Since we know that $\textbf{SPACE}(f(n))\subseteq\textbf{NSPACE}(f(n))$ and $\textbf{NSPACE}(f(n))\subseteq\textbf{SPACE}(f^2(n))$ when $f$ is polynomial, we can conclude that:
   $$\textbf{PSPACE}=\textbf{NSPACE}$$
   That is, nondeterminism does not extend the class of problems that can be solved in polynomial space.
 \end{defbox}
+
+\section{Reductions}
+Like all complexity classes, $\mathbf{NP}$ contains an infinity of languages. Of the problems and languages we have seen so far, $\mathbf{NP}$ contains \textsc{TSP (D)} and the \textsc{SAT} problem for Boolean expressions. In addition, $\mathbf{NP}$ certainly contains \textsc{REACHABILITY} and \textsc{CIRCUIT VALUE}, both of which are in $\mathbf{P}$ and thus in $\mathbf{NP}$.
+
+However, it is intuitively clear that the former two problems (\textsc{TSP (D)} and \textsc{SAT}) are somehow more representative of the complexity of $\mathbf{NP}$ than the latter two. They seem to capture more faithfully the power and complexity of $\mathbf{NP}$, and are not known (or believed) to be in $\mathbf{P}$ like the other two.
+
+To formalize the notion of one problem being ``at least as hard as'' another, we introduce the concept of \emph{reduction}. We say that problem $A$ is at least as hard as problem $B$ if $B$ reduces to $A$. That is, there is a transformation $R$ which, for every input $x$ of $B$, produces an equivalent input $R(x)$ of $A$, such that the answer to $R(x)$ for $A$ is the same as the answer to $x$ for $B$. In other words, to solve $B$ on input $x$, we just have to compute $R(x)$ and solve $A$ on it.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/reduction.png}
+  \caption{Reduction from $B$ to $A$}
+\end{figure}
+\\
+If the scenario above is possible, it seems reasonable to say that $A$ is at least as hard as $B$. With one proviso: \textit{That $R$ should not be fantastically hard to compute.} If we do not limit the complexity of computing $R$, we could arrive at absurdities such as \textsc{TSP(D)} reduced to \textsc{REACHABILITY}, and thus \textsc{REACHABILITY} being harder than \textsc{TSP(D)}! Indeed, given any instance $x$ of \textsc{TSP(D)} (that is, a distance matrix and a budget), we can apply the following reduction: Examine all tours; if one of them is cheaper than the budget, then $R(x)$ is the two-node graph consisting of a single edge from 1 to 2. Otherwise, it is the two-node graph with no edges. Notice that, indeed, $R(x)$ is a ``yes'' instance of \textsc{REACHABILITY} if and only if $x$ was a ``yes'' instance of \textsc{TSP(D)}. The flaw is, of course, that $R$ is an exponential-time algorithm.
+\begin{defbox}[Reduction]
+  As we pointed out above, for our concept of reduction to be meaningful, it should involve the weakest computation possible. \emph{We shall adopt $\log n$ space-bounded reduction as our notion of ``efficient reduction.''} That is, we say that language $L_1$ \emph{is reducible to} $L_2$ if there is a function $R$ from strings to strings computable by a deterministic Turing machine in space $\mathcal{O}(\log n)$ such that for all inputs $x$ the following is true: $x \in L_1$ if and only if $R(x) \in L_2$. $R$ is called a \emph{reduction} from $L_1$ to $L_2$. Since our focal problems in complexity involve the comparisons of time classes, it is important to note that reductions are \emph{polynomial-time algorithms}.
+  This is because $\textbf{SPACE}(\log n)\subseteq\textbf{TIME}(k^{\log n})\subseteq\textbf{TIME}(n^k)$.
+\end{defbox}
+\begin{defbox}[Reduction from Hamilton path to SAT]
+  Suppose that we are given a graph $G$. We shall construct a Boolean expression $R(G)$ such that $R(G)$ is satisfiable if and only if $G$ has a Hamilton path.
+\end{defbox}
+  Suppose that $G$ has $n$ nodes, $1,2,\ldots,n$. Then $R(G)$ will have $n^2$ Boolean variables, $x_{ij} : 1 \leq i, j \leq n$. Informally, variable $x_{ij}$ will represent the fact ``node $j$ is the $i$th node in the Hamilton path,'' which of course may be either true or false. $R(G)$ will be in conjunctive normal form, so we shall describe its clauses.
+
+The clauses will spell out all requirements on the $x_{ij}$'s that are sufficient to guarantee that they encode a true Hamilton path. To start, node $j$ must appear in the path; this is captured by the clause $(x_{1j} \vee x_{2j} \vee \ldots \vee x_{nj})$; we have such a clause for each $j$. But node $j$ cannot appear both at $i$th and $k$th; this is expressed by clause $(\neg x_{ij} \vee \neg x_{kj})$, repeated for all values of $j$, and $i \neq k$. Conversely, some node must be $i$th, thus we add the clause $(x_{i1} \vee x_{i2} \vee \ldots \vee x_{in})$ for each $i$; and no two nodes should be $i$th, or $(\neg x_{ij} \vee \neg x_{ik})$ for all $i$, and all $j \neq k$. 
+
+Finally, for each pair $(i,j)$ which is not an edge of $G$, it must not be the case that $j$ comes right after $i$ in the Hamilton path; therefore the following clauses are added for each pair $(i,j)$ not in $G$ and for $k = 1, \ldots, n-1$: $(\neg x_{ki} \vee \neg x_{k+1,j})$. This completes the construction. Expression $R(G)$ is the conjunction of all these clauses.
+
+We claim that $R$ is a reduction from \textsc{Hamilton Path} to \textsc{SAT}. To prove our claim, we have to establish two things: That for any graph $G$, expression $R(G)$ has a satisfying truth assignment if and only if $G$ has a Hamilton path; and that $R$ can be computed in space $\log n$.
+
+Suppose that $R(G)$ has a satisfying truth assignment $T$. Since $T$ satisfies all clauses of $R(G)$, it must be the case that, for each $j$ there exists a unique $i$ such that $T(x_{ij}) = \mathbf{true}$, otherwise the clauses of the form $(x_{1j} \vee x_{2j} \vee \ldots \vee x_{nj})$ and $(\neg x_{ij} \vee \neg x_{kj})$ cannot all be satisfied. Similarly, clauses $(x_{i1} \vee x_{i2} \vee \ldots \vee x_{in})$ and $(\neg x_{ij} \vee \neg x_{ik})$ guarantee that for each $i$ there exists a unique $j$ such that $T(x_{ij}) = \mathbf{true}$. Hence, $T$ really represents a permutation $\pi(1), \ldots, \pi(n)$ of the nodes of $G$, where $\pi(i) = j$ if and only if $T(x_{ij}) = \mathbf{true}$. However, clauses $(\neg x_{k,i} \vee \neg x_{k+1,j})$ where $(i,j)$ is not an edge of $G$ and $k = 1, \ldots, n-1$ guarantee that, for all $k$, $(\pi(k), \pi(k+1))$ is an edge of $G$. This means that $(\pi(1), \pi(2), \ldots, \pi(n))$ is a Hamilton path of $G$. Conversely, suppose that $G$ has a Hamilton path $(\pi(1), \pi(2), \ldots, \pi(n))$, where $\pi$ is a permutation. Then it is clear that the truth assignment $T(x_{ij}) = \mathbf{true}$ if $\pi(i) = j$, and $T(x_{ij}) = \mathbf{false}$ if $\pi(i) \neq j$, satisfies all clauses of $R(G)$.
+
+We still have to show that $R$ can be computed in space $\log n$. Given $G$ as an input, a Turing machine $M$ outputs $R(G)$ as follows: First it writes $n$, the number of nodes of $G$, in binary, and, based on $n$ it generates in its output tape, one by one, the clauses that do not depend on the graph (the first four groups in the description of $R(G)$). To this end, $M$ just needs three counters, $i$, $j$, and $k$, to help construct the indices of the variables in the clauses. For the last group, the one that depends on $G$, $M$ again generates one by one in its work string all clauses of the form $(\neg x_{ki} \vee \neg x_{k+1,j})$ for $k = 1, \ldots, n-1$; after such a clause is generated, $M$ looks at its input to see whether $(i, j)$ is an edge of $G$, and if it is not, then it outputs the clause. This completes our proof that \textsc{Hamilton Path} can be reduced to \textsc{SAT}.
+
+\begin{defbox}[Reduction Composition]
+  If $R$ is a reduction from language $L_1$ to $L_2$ and $R'$ is a reduction from language $L_2$ to $L_3$, then the composition $R' \circ R$ is a reduction from $L_1$ to $L_3$.
+\end{defbox}
+\begin{proof}
+  That $x \in L_1$ if and only if $R'(R(x)) \in L_3$ is immediate from the fact that $R$ and $R'$ are reductions. The nontrivial part is to show that $R' \circ R$ can be computed in space $\log n$.
+
+One first idea is to compose the two machines with input and output, $M_R$ and $M_{R'}$, that compute $R$ and $R'$ respectively, so that $R(x)$ is first produced, and from it the final output $R'(R(x))$. Alas, the composite machine $M$ must have $R(x)$ written on a work string; and $R(x)$ may be much longer than $\log |x|$.
+
+The solution to this problem is clever and simple: We do not explicitly store the intermediate result in a string of $M$. Instead, we simulate $M_{R'}$ on input $R(x)$ by remembering at all times the cursor position $i$ of the input string of $M_{R'}$ (which is the output string of $M_R$). $i$ is stored in binary in a new string of $M$. Initially $i = 1$, and we have a separate set of strings on which we are about to begin the simulation of $M_R$ on input $x$.
+
+Since we know that the input cursor in the beginning scans a $\triangleright$, it is easy to simulate the first move of $M_{R'}$. Whenever the cursor of $M_{R'}$'s input string moves to the right, we increment $i$ by one, and continue the computation of machine $M_R$ on input $x$ (on the separate set of strings) long enough for it to produce the next output symbol; this is the symbol currently scanned by the input cursor of $M_{R'}$, and so the simulation can go on. If the cursor stays at the same position, we just remember the input symbol scanned. If, however, the input cursor of $M_{R'}$ moves to the left, there is no obvious way to continue the simulation, since the previous symbol output by $M_R$ has been long forgotten. We must do something more radical: We decrement $i$ by one, and then run $M_R$ on $x$ \textit{from the beginning}, counting on a separate string the symbols output, and stopping when the $i$th symbol is output. Once we know this symbol, the simulation of $M_{R'}$ can be resumed. 
+
+It is clear that this machine indeed computes $R' \circ R$ in space $\log n$ (recall that $|R(x)|$ is at most polynomial in $n = |x|$, and so $i$ has $\mathcal{O}(\log n)$ bits).
+\end{proof}
+\begin{defbox}[Completeness]
+  Let $C$ be a complexity class, and let $L$ be a language in $C$. We say that $L$ is \emph{C-complete} if any language $L'\in C$ can be reduced to $L$.
+\end{defbox}
+It is not certain that every class $C$ contains a \emph{C-complete} language, but well will see that it's true for the main complexity classes.
+\begin{defbox}[Hardness]
+  To be precise, given a complexity class $C$, we say that a language $L$ is \emph{C-hard} if every language $L' \in C$ can be reduced to $L$. We say that $L$ is \emph{C-complete} if it is both $C$-hard and in $C$.
+\end{defbox}
+\begin{defbox}[Closure under reductions]
+  We say that a class $C$ is \emph{closed under reductions} if it contains every language $L'$ such that $L\in C$ and $L'$ can be reduced to $L$. That is, if $L\in C$ then $C$ contains every other problem more simple or as hard as $L$.
+  $$\textbf{P},\textbf{NP},\textbf{coNP},\textbf{L},\textbf{NL},\textbf{PSPACE}\text{ and } \textbf{EXP} \text{ are all close under reductions.}$$
+\end{defbox}
+\begin{defbox}[Proposition]
+  If two classes $C_1$ and $C_2$ are both closed under reductions, and there is a language $L$ which is complete for both classes, then $C_1=C_2$.
+\end{defbox}
+\begin{proof}
+  Since $L$ is complete for $C_1$, all languages in $C_1$ can be reduced to $L\in C_2$. Since $C_2$ is closed under reductions, it follows that $C_1\subseteq C_2$. The other inclusion follows by symmetry. 
+\end{proof}
+\begin{defbox}[Colrollary]
+  If $C_1 \subseteq C_2$, and $C_1$ is closed under reductions and contains a \emph{$C_2$-complete} language $L$, then $C_1 = C_2$.
+\end{defbox}
+\begin{proof}
+  For the sake of contradiction, suppose that $L'\in C_2\smallsetminus C_1$. For the hypothesis of \emph{$C_2$-completeness}, $L'$ can be reduces to $L\in C_1$. Then for the hypothesis of closure of $C_1$, $L'\in C_1$ which is a contradiction. 
+\end{proof}
+\subsection{Cook's Theorem}
+\begin{defbox}[Cook's Theorem]
+  \textsc{SAT} is \textbf{NP}-complete.
+\end{defbox}
+\begin{proof}
+  We know that given a satisfiable boolean expression exists a nondeterministic turing machine that is able to find and verify a satisfying assignment in polynomial time. So we have that \textsc{SAT} is in \textbf{NP}. The computation can be represented as a square table with $p(n)$ rows and columns called computation table.  This matrix cab be represented as propositional formula in CNF. We will have a symbol for each cell of the table. Let $\{q_1,\dots,q_r\}$ the states of $M$ and $\{\sigma_1,\dots,\sigma_l\}$ the symbols of the alphabet. For every step $t$ (row) end every cell $s$ (column), that is $(t,s)$ is a coordinate of a cell in the table, we will have:
+  \begin{itemize}
+    \item $P^i_{s,t}$ (true if cell $(s,t)$ contains symbol $\sigma_i$) $1\le i\le l$
+    \item $Q^i_{t}$ (true if the state $q$ at time $t$ is $q_i$) $1\le i\le r$
+    \item $S_{s,t}$ (true if the cursor at time $t$ is on cell $s$) $1\le s\le T$ where $T=p(n)$.
+  \end{itemize}
+  We need to define the following CNF clauses:
+  At every step the cursor is on exactly one cell:
+  $$\forall t\in\{1,\dots,T\}$$
+  \[
+\left( \bigvee_{s \in \{1, \dots, T\}} S_{s,t} \right) \land \left( \bigwedge_{1 \leq s < i \leq T} \neg S_{s,t} \lor \neg S_{i,t} \right)
+\]
+At every step in every cell there is exactly one symbol:
+$$\forall s,t\in\{1,\dots,T\}$$
+\[
+\left( \bigvee_{i \in \{1, \dots, l\}} P^i_{s,t} \right) \land \left( \bigwedge_{1 \leq i < j \leq l} \neg P^i_{s,t} \lor \neg P^j_{s,t} \right)
+\]
+At every step there is exactly one current state:
+$$\forall t\in\{1,\dots,T\}$$
+\[
+\left( \bigvee_{i \in \{1, \dots, r\}} Q^i_{t} \right) \land \left( \bigwedge_{1 \leq i < j \leq r} \neg Q^i_{t} \lor \neg Q^j_{t} \right)
+\]
+The initial condition are satisfied if the initial state is $q_1$, the blank $\sigma_2$ ed the initial string $\sigma_{i_1},\dots,\sigma_{i_n}$ (followed by blanks):
+$$Q^1_1\land S_{1,1}\land P^{i_1}_{1,1}\land P^{i_2}_{2,1}\land\dots\land P^{i_n}_{n,1}\land P^2_{n+1,1}\land\dots\land P^2_{T,1}$$
+ $Q^1_1$ (the initial state is $q_1$), $S_{1,1}$ (the cursor is on cell 1), $P^{i_1}_{1,1}$ (the first symbol of the input string is $\sigma_{i_1}$), $P^{i_2}_{2,1}$ (the second symbol of the input string is $\sigma_{i_2}$), $\dots$, $P^{i_n}_{n,1}$ (the last symbol of the input string is $\sigma_{i_n}$), $P^2_{n+1,1}$ (all other cells are blank), $\dots$, $P^2_{T,1}$ (all other cells are blank). We want that only the symbols under the cursor can change so:
+ $$\forall s,t\in\{1,\dots,T\}\; \forall i\in\{1,\dots,I\}$$
+ $$\neg S_{s,t}\land P^i_{s,t}\implies P^i_{s,t+1}$$
+ written in CNF: 
+ $$S_{s,t}\lor \neg P^i_{s,t}\lor P^i_{s,t+1}$$
+  The computation accepts the input if the final state $q_k$ = "yes"
+  $$Q^k_T$$
+  The configurations change as specified by the transition function $\delta$ of $M$. \\
+  For all $$(q_i,\sigma_j,q_k,\sigma_m,\la)\not\in\Delta$$
+  we have that $\forall t=1,\dots,T-1$ and $\forall s=2,\dots,T$
+  $$ Q^i_t\land S_{s,t}\land P^j_{s,t}\implies\neg(Q^k_{t+1}\land P^m_{s,t+1}\land S_{s-1,t+1})$$
+  equivalent to the CNF:
+  $$\neg Q^i_t\land \neg S_{s,t}\land \neg P^j_{s,t}\land\neg Q^k_{t+1}\land \neg P^m_{s,t+1}\land \neg S_{s-1,t+1}$$
+For exercise write the remaining clauses corresponding to the moves $\ra$ e $-$.\\
+The reduction $R(x)$ is the \emph{and} of all the clauses above.
+The problem is in \textbf{NP}: Given a satisfiable Boolean expression, a nondeterministic machine can ``guess'' the satisfying truth assignment and verify it in polynomial time. Since we know that \textsc{CIRCUIT SAT} reduces to \textsc{SAT}, we need to show that all languages in $\mathbf{NP}$ can be reduced to \textsc{CIRCUIT SAT}.
+
+Let $L \in \mathbf{NP}$. We shall describe a reduction $R$ which for each string $x$ constructs a circuit $R(x)$ (with inputs that can be either variables or constants) such that $x \in L$ if and only if $R(x)$ is satisfiable. Since $L \in \mathbf{NP}$, there is a nondeterministic Turing machine $M = (K, \Sigma, \Delta, s)$ that decides $L$ in time $n^k$. That is, given a string $x$, there is an accepting computation (sequence of nondeterministic choices) of $M$ on input $x$ if and only if $x \in L$. We assume that $M$ has a single string; furthermore, we can assume that it has at each step \emph{two nondeterministic choices}.
+ If for some state-symbol combinations there are $m > 2$ choices in $\Delta$, we modify $M$ by adding $m - 2$ new states so that the same effect is achieved (see Figure below). If for some combination there is only one choice, we consider that the two choices coincide; and finally if for some state-symbol combination there is no choice in $\Delta$, we add to $\Delta$ the choice that changes no state, symbol, or position. So, machine $M$ has exactly two choices for each symbol-state combination. One of these choices is called choice $0$ and the other choice $1$, so that a sequence of nondeterministic choices is simply a bitstring $(c_1, c_2, \ldots, c_{|x|^{k}-1}) \in \{0,1\}^{|x|^{k}-1}$.
+ \begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{img/cook.png}
+  \caption{Reducing degree of nondeterminism}
+\end{figure}
+\\
+Since the computation of nondeterministic Turing machines proceeds in parallel paths, there is no simple notion of computation table that captures all of the behavior of such a machine on an input. \emph{If, however, we fix a sequence of choices} $\mathbf{c} = (c_0, c_2, \ldots, c_{|x|^k - 1})$, then the computation is effectively deterministic (at the $i$th step we take choice $c_i$), and thus we can define the computation table $T(M, x, \mathbf{c})$ corresponding to the machine, input, and sequence of choices. Again the top row and the extreme columns of the table will be predetermined. All other entries $T_{ij}$ will depend only on the entries $T_{i-1,j-1}$, $T_{i-1,j}$, and $T_{i-1,j+1}$ and the choice $c_{i-1}$ at the previous step (see Figure).
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{img/cook2.png}
+  \caption{The construction for Cook's theorem}
+\end{figure}
+\\
+That is, this time the fixed circuit $C$ has $3m + 1$ entries instead of $3m$, the extra entry corresponding to the nondeterministic choice.
+
+Thus we can again construct in $\mathcal{O}(\log |x|)$ space a circuit $R(x)$, this time with variable gates $c_0, c_1, \ldots, c_{|x|^k - 1}$ corresponding to the nondeterministic choices of the machine. It follows immediately that $R(x)$ is satisfiable (that is, there is a sequence of choices $c_0, c_1, \ldots, c_{|x|^k - 1}$ such that the computation table is accepting) if and only if $x \in L$.
+
+\end{proof}
+  
 \end{document}
