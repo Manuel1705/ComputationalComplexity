@@ -783,8 +783,8 @@ It is not certain that every class $C$ contains a \emph{C-complete} language, bu
 \begin{proof}
   For the sake of contradiction, suppose that $L'\in C_2\smallsetminus C_1$. For the hypothesis of \emph{$C_2$-completeness}, $L'$ can be reduces to $L\in C_1$. Then for the hypothesis of closure of $C_1$, $L'\in C_1$ which is a contradiction. 
 \end{proof}
-\subsection{Cook's Theorem}
-\begin{defbox}[Cook's Theorem]
+\subsection{Cook-Levine Theorem}
+\begin{defbox}[Cook-Levine Theorem]
   \textsc{SAT} is \textbf{NP}-complete.
 \end{defbox}
 \begin{proof}
@@ -849,5 +849,14 @@ That is, this time the fixed circuit $C$ has $3m + 1$ entries instead of $3m$, t
 Thus we can again construct in $\mathcal{O}(\log |x|)$ space a circuit $R(x)$, this time with variable gates $c_0, c_1, \ldots, c_{|x|^k - 1}$ corresponding to the nondeterministic choices of the machine. It follows immediately that $R(x)$ is satisfiable (that is, there is a sequence of choices $c_0, c_1, \ldots, c_{|x|^k - 1}$ such that the computation table is accepting) if and only if $x \in L$.
 
 \end{proof}
+\begin{defbox}[3-SAT is NP-complete]
+  We also know that \textbf{3-SAT} is \textbf{NP}-complete. We can demonstrate this by reducing \textsc{SAT} to \textsc{3-SAT}. Once we have found a reduction from \textsc{SAT} to \textsc{3-SAT}, we can use the fact that \textsc{SAT} is \textbf{NP}-complete to conclude that \textsc{3-SAT} is also \textbf{NP}-complete. This is because we can reduce every problem in \textbf{NP} to \textsc{SAT}, and then reduce \textsc{SAT} to \textsc{3-SAT}.
+\end{defbox}
+\begin{defbox}[2-SAT is in P]
+  Unlike 3-SAT, we know that \textbf{2-SAT} is in \textbf{P}. This is because we can reduce \textsc{2-SAT} to the search of loops in a graph of linear dimension.
+\end{defbox}
+\begin{defbox}[Horn clauses]
+  A \textbf{Horn clause} is a disjunction of literals with at most one positive literal. A Horn formula is a conjunction of Horn clauses. A Horn formula is satisfiable if and only if it has a satisfying assignment that can be computed in linear time.
+\end{defbox}
   
 \end{document}
