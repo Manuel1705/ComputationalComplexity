@@ -8,6 +8,7 @@
 \usepackage{geometry}
 \usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{subcaption}
 \usepackage{enumitem}
 \usepackage{fancyhdr}
 
@@ -858,5 +859,253 @@ Thus we can again construct in $\mathcal{O}(\log |x|)$ space a circuit $R(x)$, t
 \begin{defbox}[Horn clauses]
   A \textbf{Horn clause} is a disjunction of literals with at most one positive literal. A Horn formula is a conjunction of Horn clauses. A Horn formula is satisfiable if and only if it has a satisfying assignment that can be computed in linear time.
 \end{defbox}
-  
+
+\newpage
+\section{Problems in NP}
+Even though there are a lot of different algorithms that can be expressed as nondeterministic Turing machines that alt in polynomial time, the NP problems can be solved with relatively uniform algorithmic strategies. One of the strategies is the \textbf{generate and test}. That is, we generate a possible solutions to the problem and test if it is a solution. This kind of procedure is modeled in abstract with the so called \textbf{polynomially balanced relations}.
+\begin{defbox}[Polynomially decidable relations]
+Let $R \subseteq \Sigma^* \times \Sigma^*$ be a binary relation on strings. $R$ is called \textbf{polynomially decidable} if there is a deterministic Turing machine deciding the language 
+\[
+\{x; y : (x, y) \in R\}
+\]
+in polynomial time. 
+\end{defbox}
+\begin{defbox}[Polynomially balanced relations]
+  We say that $R$ is \textbf{polynomially balanced} if $(x, y) \in R$ implies $|y| \leq |x|^k$ for some $k \geq 1$. That is, the length of the second component is always bounded by a polynomial in the length of the first (the other way is not important).
+\end{defbox}
+\begin{defbox}[Proposition]
+  Let $L \subseteq \Sigma^*$ be a language. $L \in \textbf{NP}$ if and only if there is a polynomially decidable and polynomially balanced relation $R$, such that 
+\[
+L = \{x : (x, y) \in R \text{ for some } y\}.
+\]
+\end{defbox}
+\begin{proof}
+  Suppose that such an $R$ exists. Then $L$ is decided by the following nondeterministic machine $M$: On input $x$, $M$ guesses a $y$ of length at most $|x|^k$ (the polynomial balance bound for $R$), and then uses the polynomial algorithm on $x; y$ to test whether $(x, y) \in R$. If so, it accepts, otherwise it rejects. It is immediate that an accepting computation exists if and only if $x \in L$.
+
+Conversely, suppose that $L \in \textbf{NP}$; that is, there is a nondeterministic Turing machine $N$ that decides $L$ in time $|x|^k$, for some $k$. Define the following relation $R$: $(x, y) \in R$ if and only if $y$ is the encoding of an accepting computation of $N$ on input $x$. It is clear that $R$ is polynomially balanced (since $N$ is polynomially bounded), and polynomially decidable (since it can be checked in linear time whether $y$ indeed encodes an accepting computation of $N$ on $x$). Furthermore, by our assumption that $N$ decides $L$, we have that $L = \{x : (x, y) \in R \text{ for some } y\}$.
+\end{proof}
+\begin{defbox}[Theorem]
+  MAX2SAT is NP-complete.
+\end{defbox}
+\begin{proof}
+  Consider the following ten clauses:
+\[
+(x)(y)(z)(w)
+\]
+\[
+(\neg x \vee \neg y)(\neg y \vee \neg z)(\neg z \vee \neg x)
+\]
+\[
+(x \vee \neg w)(y \vee \neg w)(z \vee \neg w)
+\]
+
+There is no way to satisfy all these clauses (for example, to satisfy all clauses in the first row we must lose all clauses in the second). But how many can we satisfy? Notice first that the clauses are symmetric with respect to $x$, $y$, and $z$ (but not $w$). So, assume that all three of $x$, $y$, $z$ are \textbf{true}. Then the second row is lost, and we can get all the rest by setting $w$ to \textbf{true}. If just two of $x$, $y$, $z$ are \textbf{true}, then we lose a clause from the first row, and one clause from the second row. Then we have a choice: If we set $w$ to \textbf{true}, we get one extra clause from the first row; if we set it to \textbf{false}, we get one from the third. So, we can again satisfy seven clauses, and no more. If only one of $x$, $y$, $z$ is \textbf{true}, then we have one clause from the first row and the whole second row. For the third row, we can satisfy all three clauses by setting $w$ to \textbf{false}, but then we lose $(w)$. The maximum is again seven. However, suppose that all three are \textbf{false}. Then it is easy to see that we can satisfy at most six clauses: The second and third row.
+
+In other words, these ten clauses have the following interesting property: Any truth assignment that satisfies $(x \vee y \vee z)$ can be extended to satisfy seven of them and no more, while the remaining truth assignment can be extended to satisfy only six of them. This suggests an immediate reduction from \textsc{3SAT} to \textsc{MAX2SAT}: Given any instance $\phi$ of \textsc{3SAT}, we construct an instance $R(\phi)$ of \textsc{MAX2SAT} as follows: For each clause $C_i = (\alpha \vee \beta \vee \gamma)$ of $\phi$, we add to $R(\phi)$ the ten clauses above, with $\alpha$, $\beta$, and $\gamma$ replacing $x$, $y$, and $z$; $w$ is replaced by a new variable $w_i$, particular to $C_i$. We call the ten clauses of $R(\phi)$ corresponding to a clause of $\phi$ a group. If $\phi$ has $m$ clauses, then obviously $R(\phi)$ has $10m$ clauses. The goal is set at $K = 7m$.
+
+We claim that the goal can be achieved in $R(\phi)$ if and only if $\phi$ is satisfiable. Suppose that $7m$ clauses can be satisfied in $R(\phi)$. Since we know that in each group we can satisfy at most seven clauses, and there are $m$ groups, seven clauses must be satisfied in each group. However, such an assignment would satisfy all clauses in $\phi$. Conversely, any assignment that satisfies all clauses in $\phi$ can be turned into one that satisfies $7m$ clauses in $R(\phi)$ by defining the truth value of $w_i$ in each group according to how many literals of the corresponding clause of $\phi$ are true.
+
+Finally, it is easy to check that \textsc{MAX2SAT} is in \textbf{NP}, and that the reduction can be carried out in logarithmic space (since these important prerequisites will be very clear in most of the subsequent reductions, we shall often omit mentioning them explicitly).
+\end{proof}
+\subsection{Graph-theoretic problems}
+Many interesting graph-theoretic problems are defined in terms of \textit{undirected graphs}. Technically, an undirected graph is just an ordinary graph which happens to be symmetric and have no self-loops; that is, whenever $(i, j)$ is an edge then $i \neq j$, and $(j, i)$ is also an edge. However, since we shall deal with such graphs extensively, we must develop a better notation for them. 
+
+An undirected graph is a pair $G = (V, E)$, where $V$ is a finite set of nodes and $E$ is a set of unordered pairs of nodes in $V$, called \textit{edges}; an edge between $i$ and $j$ is denoted $[i, j]$. An edge will be depicted as a line (no arrows). \textit{All graphs in this section are undirected.}
+Let $G = (V, E)$ be an undirected graph, and let $I \subseteq V$. We say that the set $I$ is \textit{independent} if whenever $i, j \in I$ then there is no edge between $i$ and $j$. All graphs (except for the one with no nodes) have non-empty independent sets; the interesting question is, what is the largest independent set in a graph. The \textsc{INDEPENDENT SET} problem is this: Given an undirected graph $G = (V, E)$, and a goal $K$, is there an independent set $I$ with $|I| = K$?
+\begin{defbox}[Theorem]
+  INDEPENDENT SET is NP-complete
+\end{defbox}
+\begin{proof}
+  The proof uses a simple gadget, the \textit{triangle}. The point is that if a graph contains a triangle, then any independent set can obviously contain at most one node of the triangle. But there is more to the construction.
+
+Interestingly, to prove that \textsc{INDEPENDENT SET} is \textbf{NP}-complete it is best to \textit{restrict the class of graphs} we consider. Although restricting the domain makes a problem easier, in this case the restriction is such that it retains the complexity of the problem, while making the issues clearer. We consider only graphs \textit{whose nodes can be partitioned in $m$ disjoint triangles} (see Figure).
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1\textwidth]{img/independent_set.png}
+  \caption{Reduction to independent set}
+\end{figure}
+\\
+Then obviously an independent set can contain at most $m$ nodes (one from each triangle); an independent set of size $m$ exists if and only if the other edges of the graph allow us to choose one node from each triangle.
+
+Once we look at such graphs, the combinatorics of the \textsc{INDEPENDENT SET} problem seem easier to understand (and yet no easier to resolve computationally). In fact, a reduction from \textsc{3SAT} is immediate: For each one of the $m$ clauses of the given expression $\phi$ we create a separate triangle in the graph $G$. Each node of the triangle corresponds to a literal in the clause. The structure of $\phi$ is taken into account in this simple manner: We add an edge between two nodes in different triangles \textit{if and only if the nodes correspond to opposite literals} (see Figure 9.2). The construction is completed by taking the goal to be $K = m$.
+
+Formally, we are given an instance $\phi$ of \textsc{3SAT} with $m$ clauses $C_1, \ldots, C_m$, with each clause being $C_i = (\alpha_{i1} \vee \alpha_{i2} \vee \alpha_{i3})$, with the $\alpha_{ij}$'s being either Boolean variables or negations thereof. Our reduction constructs a graph $R(\phi) = (G, K)$, where $K = m$, and $G = (V, E)$ is the following graph: 
+\[
+V = \{v_{ij} : i = 1, \ldots, m; j = 1, 2, 3\}; 
+ \]
+ \[ E = \{[v_{ij}, v_{ik}] : i = 1, \ldots, m; j \neq k\} \cup \{[v_{ij}, v_{ek}] : i \neq e, \alpha_{ij} = \neg \alpha_{ek}\}.
+\]
+(There is a node for every appearance of a literal in a clause; the first set of edges defines the $m$ triangles, and the second group joins opposing literals.)
+
+We claim that there is an independent set of $K$ nodes in $G$ if and only if $\phi$ is satisfiable. Suppose that such a set $I$ exists. Since $K = m$, $I$ must contain a node from each triangle. Since the nodes are labeled with literals, and $I$ contains no two nodes corresponding to opposite literals, $I$ is a truth assignment that satisfies $\phi$: The \textit{true} literals are just those which are labels of nodes of $I$ (variables left unassigned by this rule can take any value). We know that this gives a truth assignment because any two contradictory literals are connected by an edge in $G$, and so they cannot both be in $I$. And since $I$ has a node from every triangle, the truth assignment satisfies all clauses. Conversely, if a satisfying truth assignment exists, then we identify a \textit{true} literal in each clause, and pick the node in the triangle of this clause labeled by this literal: This way we collect $m = K$ independent nodes. 
+\end{proof}
+Even if the graph is planar, the \textsc{INDEPENDENT SET} problem remains \textbf{NP}-complete (see Problem 9.5.9). However, it is polynomially solvable when the graph is bipartite (see Problem 9.5.25). The reason for this is that, in bipartite graphs, \textsc{INDEPENDENT SET} is closely related to \textsc{MATCHING}, which in turn is a special case of \textsc{MAX FLOW}.
+
+This brings about an interesting point: Problems in graph theory can be guises of one another in confusing ways; sometimes this suggests trivial reductions from a problem to another. In the \textsc{CLIQUE} problem we are given a graph $G$ and a goal $K$, and we ask whether there is a set of $K$ nodes that form a \textit{clique} by having all possible edges between them. Also, \textsc{NODE COVER} asks whether there is a set $C$ with $B$ or fewer nodes (where $B$ is a given ``budget;'' this is a minimization problem) such that each edge of $G$ has at least one of its endpoints in $C$.
+\begin{defbox}[Corollary]
+  CLIQUE and NODE COVER are NP-complete
+\end{defbox}
+\begin{proof}
+  It is easy to see that \textsc{CLIQUE} is a clumsy disguise of \textsc{INDEPENDENT SET}: If we take the \textit{complement} of the graph, that is, a graph that has precisely those edges that are missing from this one, cliques become independent sets and vice-versa. Also, $I$ is an independent set of graph $G = (V, E)$ if and only if $V - I$ is a node cover of the same graph (and, moreover, \textsc{NODE COVER} is, conveniently, a minimization problem)
+\end{proof}
+\begin{defbox}[Theorem]
+  The \textsc{HAMILTON PATH} problem is NP-complete.
+  Recall that the \textsc{HAMILTON PATH} problem is the problem of deciding whether a given graph $G$ has a path that visits every node exactly once and ends at the starting node.   
+\end{defbox}
+\begin{proof}
+  The fact that \textsc{HAMILTON PATH} is in \textbf{NP} is immediate: Given a path, we can check in linear time whether it visits every node exactly once. To prove the hardness of the problem, we reduce \textsc{3SAT} to it.
+\end{proof}
+\begin{defbox}[Theorem]
+  \textsc{TSP(D)} is NP-complete
+\end{defbox}
+\begin{proof}
+  An instance of \textsc{TSP(D)} is a complete graph. Every node of the instance of \textsc{Hamilton path} is a city. If two cities are connected by an edge, then the distance between them is 1. If two cities are not connected by an edge, then the distance between them is 2. The goal is to find a Hamiltonian cycle of length $n$ in the graph. Thus, we can reduce \textsc{TSP(D)} to \textsc{HAMILTON PATH}.
+\end{proof}
+\begin{defbox}[Theorem]
+  \textsc{3-COLORING} is NP-complete
+\end{defbox}
+\begin{proof}
+  Recall that the \textsc{K-COLORING} problem is the problem of deciding whether a given graph can be colored with k colors such that no two adjacent nodes have the same color. The \textsc{2-COLORING} problem is in P. Now let's dimostrate that \textsc{3-COLORING} is NP-complete. To prove that \textsc{3-COLORING} is in NP, is easy. We can generate nondeterministically a color for every node and check in polynomial time if the graph is 3-colorable.
+  The total cost in $O(n^3)$. To prove that \textsc{3-COLORING} is NP-complete, we can reduce \textsc{3SAT} to \textsc{3-COLORING}. We will use 2 gadget. The first one codifies the truth assignments.
+  \\
+  \begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{img/3-coloring-1g.png}
+  \caption{1st gadget}
+  \end{figure}
+  \\
+   Every proposition $v_i$ is colored as $T$ or $F$. Every negative literal $\overline{v_i}=\neg v_i$ is colored the opposite way. The second gadget codifies the OR. If $p,q$ are both colored with $F$ then $p\vee q$ is $F$ as well otherwise it can always be colored with $T$.
+   \\
+   \begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{img/3-coloring-2g.png}
+        \caption{case 1}
+        \label{fig:img1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{img/3-coloring-2g2.png}
+        \caption{case 2}
+        \label{fig:img2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{img/3-coloring-2g3.png}
+        \caption{case 3}
+        \label{fig:img3}
+    \end{subfigure}
+    \caption{2nd gadget}
+    \label{fig:images}
+\end{figure}
+\\
+The or are connected in cascade to represent the 3 clauses. If $a,b,c$ are colored with F the $a\vee b\vee c$ is colored with F as well otherwise it can be colored with T. 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{img/3-coloring-3g.png}
+  \caption{OR cascade}
+\end{figure}
+\\
+To ensure that the clauses are satisfied we connect the clauses output like this:
+\\
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{img/3-coloring-4g.png}
+  \caption{Final graph}
+\end{figure}
+\\
+This way we can ensure that the clauses are satisfied because at least one of the literals must be colored with T otherwise the final node would be colored with F.
+\end{proof}
+Complete example:\\
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.9\textwidth]{img/3-coloring-example.png}
+  \caption{complete example}
+\end{figure}
+\subsection{Problems on sets}
+Suppose that we are given three sets $B$, $G$, and $H$ (boys, girls, and homes), each containing $n$ elements, and a ternary relation $T \subseteq B \times G \times H$. We are asked to find a set of $n$ triples in $T$, no two of which have a component in common—that is, each boy is matched to a different girl, and each couple has a home of its own. We call this problem \textsc{TRIPARTITE MATCHING}.
+\begin{defbox}[Theorem]
+  \textsc{TRIPARTITE MATCHING} is NP-complete.
+\end{defbox}
+\begin{proof}
+  omitted (lezione 11-1 28:40)
+\end{proof}
+There are some other interesting problems involving sets, that we define next. In \textsc{SET COVERING} we are given a family $F = \{S_1, \ldots, S_n\}$ of subsets of a finite set $U$, and a budget $B$. We are asking for a set of $B$ sets in $F$ whose union is $U$. In \textsc{SET PACKING} we are also given a family of subsets of a set $U$, and a goal $K$; this time we are asked if there are $K$ pairwise disjoint sets in the family. In a problem called \textsc{EXACT COVER BY 3-SETS} we are given a family $F = \{S_1, \ldots, S_n\}$ of subsets of a set $U$, such that $|U| = 3m$ for some integer $m$, and $|S_i| = 3$ for all $i$. We are asked if there are $m$ sets in $F$ that are disjoint and have $U$ as their union.
+
+We can show all these problems \textbf{NP}-complete by pointing out that they are all generalizations of \textsc{TRIPARTITE MATCHING}. This is quite immediate in the case of \textsc{EXACT COVER BY 3-SETS}; \textsc{TRIPARTITE MATCHING} is the special case in which $U$ can be partitioned into three equal sets $B$, $G$, and $H$, such that each set in $F$ contains one element from each. Then, it is easy to see that \textsc{EXACT COVER BY 3-SETS} is the special case of \textsc{SET COVERING} in which the universe has $3m$ elements, all sets in $F$ have three elements, and the budget is $m$. Similarly for \textsc{SET PACKING}.
+\begin{defbox}[Corollary]
+\textsc{EXACT COVER BY 3-SETS}, \textsc{SET COVERING}, and \textsc{SET PACKING} are NP-complete.
+\end{defbox}
+\subsection{Integer programming}
+\textsc{INTEGER PROGRAMMING} asks whether a given system of linear inequalities, in $n$ variables and with integer coefficients, has an integer solution. We have already seen more than a dozen reasons why this problem is \textbf{NP}-complete: All problems we have seen so far can be easily expressed in terms of linear inequalities over the integers. For example, \textsc{SET COVERING} can be expressed by the inequalities 
+\[
+Ax \geq 1; \quad \sum_{i=1}^n x_i \leq B; \quad 0 \leq x_i \leq 1,
+\]
+where each $x_i$ is a $0 - 1$ variable which is one if and only if $S_i$ is in the cover, $A$ is the matrix whose rows are the bit vectors of the sets, $1$ is the column vector with all entries $1$, and $B$ is the budget of the instance. Hence \textsc{INTEGER PROGRAMMING} is \textbf{NP}-complete (the hard part is showing that it is in \textbf{NP}; see the notes at the end of the chapter). In contrast, \textsc{LINEAR PROGRAMMING}, the same problem without the requirement that the solutions be integers, is in \textbf{P} (see the discussion in 9.5.34).
+
+We shall next look at a very special case of \textsc{INTEGER PROGRAMMING}. The \textsc{KNAPSACK} problem looks at the following situation. We must select some among a set of $n$ items. Item $i$ has value $v_i$, and weight $w_i$, both positive integers. There is a limit $W$ to the total weight of the items we can pick. We wish to pick certain items (without repetitions) to maximize the total value, subject to the constraint that the total weight is at most $W$. That is, we are looking for a subset $S \subseteq \{1, \ldots, n\}$ such that 
+\[
+\sum_{i \in S} w_i \leq W, \quad \text{and} \quad \sum_{i \in S} v_i \text{ is as large as possible.}
+\]
+In the recognition version, called \textsc{KNAPSACK}, we are also given a goal $K$, and we wish to find a subset $S \subseteq \{1, \ldots, n\}$ such that 
+\[
+\sum_{i \in S} w_i \leq W \quad \text{and} \quad \sum_{i \in S} v_i \geq K.
+\]
+\begin{defbox}[Theorem]
+  \textsc{KNAPSACK} is NP-complete.
+\end{defbox}
+\begin{proof}
+  This is another case in which restricting the problem facilitates the \textbf{NP}-completeness proof. We are going to look at the special case of \textsc{KNAPSACK} in which $v_i = w_i$ for all $i$, and $K = W$. That is, we are given a set of $n$ integers $w_1, \ldots, w_n$, and another integer $K$, and we wish to find out if a subset of the given integers adds up to exactly $K$. This simple numerical problem turns out to be \textbf{NP}-complete.
+
+We shall reduce \textsc{EXACT COVER BY 3-SETS} to it. We are given an instance $\{S_1, S_2, \ldots, S_n\}$ of \textsc{EXACT COVER BY 3-SETS}, where we are asking whether there are disjoint sets among the given ones that cover the set $U = \{1, 2, \ldots, 3m\}$. Think of the given sets as bit vectors in $\{0, 1\}^{3m}$. Such vectors can also be thought as binary integers, and set union now resembles integer addition (see Figure).
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{img/knapsack.png}
+  \caption{Reduction to knapsack}
+\end{figure}
+\\
+ Our goal is to find a subset of these integers that add up to exactly $K$.
+
+Let $K = 2^n - 1$ (the all-ones vector, corresponding to the universe). The reduction seems complete!
+
+But there is a ``bug'' in this reduction: Binary integer addition is different from set union in that it has carry. For example, $3 + 5 + 7 = 15$ in bit-vector form is $0011 + 0101 + 0111 = 1111$; but the corresponding sets $\{3, 4\}, \{2, 4\},$ and $\{2, 3, 4\}$ are not disjoint, neither is their union $\{1, 2, 3, 4\}$. There is a simple and clever way around this problem: Think of these vectors as integers not in base 2, but in base $n + 1$. That is, set $S_i$ becomes integer $w_i = \sum_{j \in S_i} (n + 1)^{3m-j}$. 
+
+Since now there can be no carry in any addition of up to $n$ of these numbers, it is straightforward to argue that there is a set of these integers that adds up to $K = \sum_{j=0}^{3m-1} (n + 1)^j$ if and only if there is an exact cover among $\{S_1, S_2, \ldots, S_n\}$. 
+\end{proof}
+\subsection{Pseudopolynomial Algorithms and strong NP-completeness}
+\begin{defbox}[Proposition]
+  Any instance of \textsc{KNAPSACK} can be solved in $\mathcal{O}(nW)$ time, where $n$ is the number of items and $W$ is the weight limit.
+\end{defbox}
+\begin{proof}
+  Define $V(w, i)$ to be the largest value attainable by selecting some among the $i$ first items so that their total weight is exactly $w$. It is easy to see that the $nW$ entries of the $V(w, i)$ table can be computed in order of increasing $i$, and with a constant number of operations per entry, as follows:
+\[
+V(w, i+1) = \max\{V(w, i), v_{i+1} + V(w - w_{i+1}, i)\}.
+\]
+To start, $V(w, 0) = 0$ for all $w$. Finally, the given instance of \textsc{KNAPSACK} is a ``yes'' instance if and only if the table contains an entry greater than or equal to the goal $K$. 
+\end{proof}
+This algorithm is called \textbf{pseudopolynomial} because it runs in polynomial time with respect to the value of the input, but not with respect to the size(representation) of the input. 
+$W=O(2^{|W|})$ so the problem \textsc{P=NP} is not solved. If we use small integers we can solve the problem in polynomial time. But if we use big integers we can not solve the problem in polynomial time.
+Naturally, the above proposition does not establish that $\mathbf{P} = \mathbf{NP}$ (so, keep on reading this book!). This is not a polynomial algorithm because its time bound $nW$ is not a polynomial function of the input: The length of the input is something like $n \log W$. We have seen this pattern before in our first attempt at an algorithm for \textsc{MAX FLOW}, when the time required was again polynomial in the integers appearing in the input (instead of their logarithms, which is always the correct measure). Such ``pseudopolynomial'' algorithms are a source not only of confusion, but of genuinely positive results.
+
+In relation to pseudopolynomial algorithms, it is interesting to make the following important distinction between \textsc{KNAPSACK} and the other problems that we showed \textbf{NP}-complete in this chapter---\textsc{SAT}, \textsc{MAX CUT}, \textsc{TSP (D)}, \textsc{CLIQUE}, \textsc{TRIPARTITE MATCHING}, \textsc{HAMILTON PATH}, and many others. All these latter problems were shown \textbf{NP}-complete via reductions that constructed only \textit{polynomially small integers}. For problems such as \textsc{CLIQUE} and \textsc{SAT}, in which integers are only used as node names and variable indices, this is immediate. But even for \textsc{TSP (D)}, in which one would expect numbers to play an important role as intercity distances, we only needed distances no larger than two to establish \textbf{NP}-completeness. In contrast, in our \textbf{NP}-completeness proof for \textsc{KNAPSACK} we had to create \textit{exponentially large integers} in our reduction.
+\begin{defbox}[Strong NP-completeness]
+If a problem remains \textbf{NP}-complete even if any instance of length $n$ is restricted to contain integers of size at most $p(n)$, a polynomial, then we say that the problem is \textit{strongly NP-complete}. All \textbf{NP}-complete problems that we have seen so far in this chapter, with the single exception of \textsc{KNAPSACK}, are strongly \textbf{NP}-complete. It is no coincidence then that, of all these problems, only \textsc{KNAPSACK} can be solved by a pseudopolynomial algorithm: It should be clear that strongly \textbf{NP}-complete problems have no pseudopolynomial algorithms, unless of course $\mathbf{P} = \mathbf{NP}$.
+\end{defbox}
+\subsection{Exercises}
+\subsubsection{exercise 1}
+Given a graph:
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{img/es1.png}
+\end{figure}
+\\
+- The independent sets (that is, the sets of nodes that are not connected) are: $$\{\}, \{1\}, \{2\}, \{3\}, \{4\}, \{3,4\}, \{3,2\}, \{4,2\}, \{3,4,2\}$$
+- The clique sets (that is, the sets of nodes that are strongly connected) are: 
+$$ \{\}, \{1\}, \{2\}, \{3\}, \{4\}, \{1,3\}, \{1,2\}, \{1,4\} $$
+- The node cover sets (that is, the sets of nodes that are connected to all the other nodes) are:
+$\{1\}$\\
+- Provide a succinct certificate for the instance of node cover made up of this graph and $K=2$ (that is a minimization problem where we want to find the set of at max 2 nodes that is connected to all the other nodes):
+$\{1\}$
+\subsubsection{exercise 2}
+
 \end{document}
