@@ -1205,7 +1205,50 @@ The problems in $coNP$ that are $coNP$-complete are the least likely to be in $P
 \begin{proof}
   Let $L\in P$. Then $\overline{L}\in P$ because $P$ is closed under complement. Since $L$ is also in $NP$ because $P\subseteq NP$, we have that $\overline{L}\in NP$. So for definition of $coNP$, we have that $L\in\coNP$.
 \end{proof}
-
-  
-
+  So, problems in $NP$ have succinct certificates, whereas problems in $coNP$ have succinct disqualifications. $NP \cap coNP$ is the class of problems that have both! That is, problems in $NP \cap coNP$ have the following property: Each instance either has a succinct certificate (in which case it is a ``yes'' instance) or it has a succinct disqualification (in which case it is a ``no'' instance). No instance has both. The nature of certificates and disqualifications will be very different, and different algorithms will be used to validate them. But exactly one of the two always exists. Obviously, any problem in $P$ is also in $NP \cap coNP$, but there are examples of problems in $NP \cap coNP$ that are not known to be in $P$.
+\subsection{Exercises}
+\subsubsection{exercise 1}
+Say if there is a reduction between the following problems:
+\begin{itemize}
+  \item \textsc{SAT} to \textsc{VALIDITY}\\
+  \textsc{SAT}$\in NP$ and \textsc{VALIDITY}$\in coNP$ so would be true if \textsc{NP=coNP} but we don't know that.
+  \item \textsc{VALIDITY} to \textsc{SAT}\\
+  Same as above.
+  \item \textsc{PRIMES} to \textsc{2-SAT}\\
+  Yes, because \textsc{PRIMES} is in P and \textsc{2-SAT} is P-complete.
+  \item \textsc{2-SAT} to \textsc{PRIMES}\\
+  Would be true if \textsc{PRIMES} were P-complete but we don't know that.
+  \item \textsc{PRIMES} to $\overline{\textsc{TSP(D)}}$\\
+  Yes, because \textsc{PRIMES} is in P and $\overline{\textsc{TSP(D)}}$ is co\textsc{NP}-complete.
+  \item $\overline{\textsc{TSP(D)}}$ to \textsc{PRIMES}\\
+  Would be true if \textsc{PRIMES} were P-complete and P=co\textsc{NP}=\textsc{NP} but we don't know that.
+  \item \textsc{PRIMES} to \textsc{CLIQUE}\\
+  Yes, because \textsc{CLIQUE} is NP-complete and \textsc{PRIMES} is in P.
+  \item \textsc{CLIQUE} to \textsc{PRIMES}\\
+  Would be true if \textsc{PRIMES} were P-complete and P=\textsc{NP} but we don't know that.
+\end{itemize}
+\subsubsection{exercise 2}
+Assume that $\NP\not=\coNP$. Say if there exist a reduction between the following problems:
+\begin{itemize}
+  \item \textsc{SAT} to \textsc{VALIDITY}\\
+  No, because \textsc{SAT} is NP-complete and \textsc{VALIDITY} is co\textsc{NP}-complete. So if there was a reduction from \textsc{SAT} to \textsc{VALIDITY} then we would have that \textsc{NP}=\textsc{coNP}.
+  \item \textsc{VALIDITY} to \textsc{SAT}\\
+  Same as above.
+  \item \textsc{CLIQUE} to \textsc{PRIMES}\\
+  No, because \textsc{CLIQUE} is NP-complete and \textsc{PRIMES} is in P. So if there was a reduction from \textsc{CLIQUE} to \textsc{PRIMES} then we would have that \textsc{NP}=\textsc{P}=\textsc{coNP}.
+  \item \textsc{PRIMES} to \textsc{CLIQUE}\\
+  Yes, because \textsc{PRIMES} is in P and \textsc{CLIQUE} is NP-complete.
+  \item \textsc{NODE COVER} to \textsc{2-SAT}\\
+  No, because \textsc{NODE COVER} is NP-complete and \textsc{2-SAT} is in P. So if there was a reduction from \textsc{NODE COVER} to \textsc{2-SAT} then we would have that \textsc{NP}=\textsc{P}=\textsc{coNP}.
+  \item \textsc{2-SAT} to \textsc{NODE COVER}\\
+  Yes, because \textsc{2-SAT} is in P and \textsc{NODE COVER} is NP-complete.
+  \item \textsc{PRIMES} to \textsc{KNAPSACK}\\
+  Yes, because \textsc{PRIMES} is in P and \textsc{KNAPSACK} is NP-complete.
+  \item \textsc{KNAPSACK} to \textsc{PRIMES}\\
+  No, because \textsc{KNAPSACK} is NP-complete and \textsc{PRIMES} is in P. So if there was a reduction from \textsc{KNAPSACK} to \textsc{PRIMES} then we would have that \textsc{NP}=\textsc{P}=\textsc{coNP}.
+  \item \textsc{MAX-FLOW} to \textsc{3-COLORING}\\
+  Yes, because \textsc{MAX-FLOW} is in P and \textsc{3-COLORING} is NP-complete.
+  \item \textsc{3-COLORING} to \textsc{MAX-FLOW}\\
+  No, because \textsc{3-COLORING} is NP-complete and \textsc{MAX-FLOW} is in P. So if there was a reduction from \textsc{3-COLORING} to \textsc{MAX-FLOW} then we would have that \textsc{NP}=\textsc{P}=\textsc{coNP}.
+\end{itemize}
 \end{document}
