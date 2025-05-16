@@ -53,6 +53,10 @@
 \newcommand{\blank}{\sqcup}
 \newcommand{\ra}{\rightarrow}
 \newcommand{\la}{\leftarrow}
+\newcommand{\NP}{\textsc{NP }}
+\newcommand{\coNP}{co\textsc{NP }}
+\newcommand{\C}{\textsc{C}}
+\newcommand{\coC}{co\textsc{C}}
 % Title and Author
 \title{Computational Complexity}
 \author{Manuel Mignogna}
@@ -1107,5 +1111,101 @@ $\{1\}$\\
 - Provide a succinct certificate for the instance of node cover made up of this graph and $K=2$ (that is a minimization problem where we want to find the set of at max 2 nodes that is connected to all the other nodes):
 $\{1\}$
 \subsubsection{exercise 2}
+Premise: The fragment of Schönfinkel-Bernays is a formula of first order logic where there are no function symbols, no equality, and in prenex normal form (that is, all the quantifiers are at the beginning of the formula). Schönfinkel-Bernays SAT problem has been shown to be NEXP-complete.
+Say if there exists a reduction form the following problems:
+\begin{itemize}
+  \item \textsc{SAT} to \textsc{TSP(D)}\\
+  YES, because they are both NP-complete problems.
+  \item \textsc{TSP(D)} to \textsc{SAT}\\
+  YES, because they are both NP-complete problems.
+  \item \textsc{HAMILTON PATH} to \textsc{SET COVER}\\
+  YES, because they are both NP-complete problems.
+  \item \textsc{SET COVER} to \textsc{HAMILTON PATH}\\
+  YES, because they are both NP-complete problems.
+  \item \textsc{CLIQUE} to \textsc{2-SAT}\\
+  Would be true if \textsc{P=NP} but we don't know that.
+  \item \textsc{2-SAT} to \textsc{CLIQUE}\\
+  YES, because \textsc{2-SAT} is in P and \textsc{CLIQUE} is NP-complete.
+  \item \textsc{2-SAT} to \textsc{Schönfinkel-Bernays SAT}\\
+  YES, because \textsc{2-SAT} is in P and \textsc{Schönfinkel-Bernays SAT} is NEXP-complete.
+  \item \textsc{Schönfinkel-Bernays SAT} to \textsc{2-SAT}\\
+  NO, because \textsc{Schönfinkel-Bernays SAT} is NEXP-complete and \textsc{2-SAT} is in P. We know that $P\subset EXP$ so it is impossible to have a reduction from NEXP-complete to P.
+  \item \textsc{MAX FLOW} to \textsc{3-COLORING}\\
+  YES, because \textsc{MAX FLOW} is in P and \textsc{3-COLORING} is NP-complete.
+  \item \textsc{3-COLORING} to \textsc{MAX FLOW}\\
+  Would be true if \textsc{P=NP} but we don't know that.
+\end{itemize}
+\subsubsection{exercise 3}
+Specify a format for a succinct certificate for the \textsc{3-COLORING} problem (that is, a string no too long with respect to the input that represents a solution to the problem). A valid format could be a string with the couples $(i,j)$ where $i$ is the node and $j$ is the color. The node index could be in positional representation so it would be a string of length $O(\log n)$ and the color could be a single character. So the final string would be of length $O(n \log n)$ which is polynomial with respect to the input.\\
+Show a certificate for the following graph:
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{img/es3.png}
+\end{figure}
+\\
+A possible certificate could be:
+$001,r;010,b;011,b;100,g$
+
+\newpage
+\section{coNP}
+If $NP$ is the class of problems that have succinct certificates (recall Theorem 9.1), then $coNP$ must contain those problems that have \textit{succinct disqualifications}. That is, a ``no'' instance of a problem in $coNP$ possesses a short proof of its being a ``no'' instance; and only ``no'' instances have such proofs.
+
+\textbf{Example:} \textit{VALIDITY of Boolean expressions} is a typical problem in $coNP$. We are given a Boolean expression $\phi$, and we are asked whether it is valid, satisfiable by all truth assignments. If $\phi$ is not a valid formula, then it can be disqualified very succinctly: By exhibiting a truth assignment that does not satisfy it. No valid formula has such a disqualification.
+
+For another example, \textit{HAMILTON PATH COMPLEMENT} is the set of all graphs that have no Hamilton path. Since it is the complement of the \textit{HAMILTON PATH problem}\footnote{Recall that we say two languages are complements of each other if they are disjoint and their union is, not necessarily the set of all strings, but some other, trivial to recognize set; in this case, the set of all strings that are legitimate encodings of graphs.}, it is in $coNP$. Here the disqualification is, naturally enough, a Hamilton path: All ``no'' instances of \textit{HAMILTON PATH COMPLEMENT}, and only these, have one. We should also mention here \textit{SAT COMPLEMENT}; but in some sense we already have: \textit{VALIDITY} is just \textit{SAT COMPLEMENT} with the expression negated.
+
+Needless to say, all problems that are in $P$ are ex officio in $coNP$, since $P \subseteq NP$ is a deterministic complexity class, and therefore closed under complement.
+
+\textit{VALIDITY} and \textit{HAMILTON PATH COMPLEMENT} are examples of $coNP$-complete problems. We claim that any language $L$ in $coNP$ is reducible to \textit{VALIDITY}. In proof, if $L \in coNP$ then $\overline{L} \in NP$, and thus there is a reduction $R$ from $\overline{L}$ to \textit{SAT}. For any string $x$ we have $x \in \overline{L}$ if and only if $R(x)$ is satisfiable. The reduction from $L$ to \textit{VALIDITY} is this: $R'(x) = \neg R(x)$. The proof for \textit{HAMILTON PATH COMPLEMENT} is very similar. More generally, we have:
+
+\begin{defbox}[Definition of complement of language/problem]
+ Given $L\subseteq I$, the complement of $L$ is defined as $\overline{L} = I \smallsetminus L$. 
+ Given a complexity class $C$, 
+ $$\overline{L}\in co\textsc{C} \iff L\in C$$
+ So \coNP is the class of languages $\overline{L}$ whose complement $L\in\textsc{NP}$.
+\end{defbox}
+
+\begin{defbox}[Proposition A]
+  If $R$ is a reduction from $L$ to $L'$ then $R$ is also a reduction from $\overline{L}$ to $\overline{L'}$
+\end{defbox}
+\begin{proof}
+  For hypothesis, $$x\in L\iff R(x)\in L'$$
+  Then, 
+  $$x\in \overline{L} \iff x\notin L \iff R(x)\notin L' \iff R(x)\in \overline{L'}$$
+  same for the other direction.
+\end{proof}
+\begin{defbox}[Proposition B]
+If $L$ is \textsc{NP}-complete, then its complement $\overline{L} = \Sigma^* - L$ is $coNP$-complete.
+\end{defbox}
+\begin{proof}
+  Since $L$ is \textsc{NP}-complete, we know that $\overline{L}$ is in $coNP$. Now let's prove that $\overline{L}$ is $coNP$-complete. Let $\overline{L'}\in \coC (L'\in \textsc{C})$. For hp there exist a reduction $R$ from $L'$ to $L$. Por the  proposition A, we have that $R$ is also a reduction from $\overline{L'}$ to $\overline{L}$. Since this is true for every $\overline{L'}\in\coC$, we can conclude that $\overline{L}$ is $coNP$-complete.
+  The other way is proven by symmetry.
+\end{proof}
+
+\begin{defbox}[Proposition C]
+  If $C$ is closed under reduction, then $coC$ is closed under reduction.
+\end{defbox}
+\begin{proof}
+  Let $C$ be close under reduction. Let $L\in\coC$ and suppose there exist a reduction $R$ from $L'$ to $L$. We need to prove that $L'\in\coC$.
+  For proposition A, we have that $R$ is also a reduction from $\overline{L}$ to $\overline{L'}$. $\overline{L}\in C$ and $C$ is closed under reduction, so $\overline{L'}\in C$. So $L'\in \coC$.
+\end{proof}
+
+\begin{defbox}[Proposition D]
+  If \C is closed under reduction and a \C-complete problem is in \coC then \C=\coC
+\end{defbox}
+\begin{proof}
+  Let $L\in\coC$ be a \C-complete problem. Let first prove that $\C\subseteq\coC$. For every $L'\in\C$, there exists a reduction $R$ from $L'$ to $L$ (because $L$ is \C-complete). Since $L\in\coC$ and co\textsc{C} is closed under reduction for proposition C, then $L'\in\coC$. So $\C\subseteq\coC$. Since $L$ is \C-complete, we have that $\overline{L}\in\coC$ is \coC-complete for proposition B. Since $L'\in\coC$, there exist a reduction $R: L'\to\overline{L}$. We know that $L\in\C$ because $L$ is \C-complete and $L\in\coC$ for hypothesis. So $L\in\C\cap\coC$. For this we can also say that $\overline{L}\in\C\cap\coC$. Since there is a reduction $R: L'\to\overline{L}$ then $L'\in\C$. So $\coC\subseteq\C$. We have that $\C\subseteq\coC$ and $\coC\subseteq\C$ so $\C=\coC$. 
+\end{proof}
+Whether $NP = coNP$ is another fundamental question that is as important as it is unresolved (you will encounter many more of these). Of course, if after all it turns out that $P = NP$, then $NP = coNP$ will also hold, since $P$ is closed under complement. Conceivably it could be that $P \neq NP$, and still $NP = coNP$. But it is strongly believed that $NP$ and $coNP$ are different. All efforts to find systematic ways for deriving short proofs of \textit{VALIDITY}, for example, have failed. Similarly, we know of no characterizations of non-Hamiltonian graphs that would allow us to demonstrate the absence of a Hamilton path succinctly.
+
+The problems in $coNP$ that are $coNP$-complete are the least likely to be in $P$. What is more, \textit{they are also the least likely to be in $NP$}.
+\begin{defbox}[Proposition]
+  $$P\subseteq \textsc{NP}\cap\coNP$$
+\end{defbox}
+\begin{proof}
+  Let $L\in P$. Then $\overline{L}\in P$ because $P$ is closed under complement. Since $L$ is also in $NP$ because $P\subseteq NP$, we have that $\overline{L}\in NP$. So for definition of $coNP$, we have that $L\in\coNP$.
+\end{proof}
+
+  
 
 \end{document}
