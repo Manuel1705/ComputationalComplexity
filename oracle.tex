@@ -1,0 +1,61 @@
+\newpage
+\section{Oracle Machines}
+\begin{defbox}[TM with oracle]
+  Is a multitape TM with a special tape that can be used to ask questions to an oracle. It also have 3 special states: $q_?,q_{YES},q_{NO}$. $M^?$ is like a template, given a problem $L$, we have $M^L$ where the 3 special states are use to question the oracle whether the input is in $L$ or not. The state $q_?$ is used to ask the oracle, $q_{YES}$ and $q_{NO}$ are the possible answers. The oracle is not part of the TM, it is a black box that can be used to ask questions regarding $L$. In addition to the standard TM transitions we have the following transitions:
+\[
+  (q_?, w_1, u_1, \dots, w_k, u_k) \xrightarrow{M} (q_{ans}, w_1, u_1, \dots, w_k, u_k)
+\]
+where if the query tape is the i-th tape and $w_iu_i=\tr x$ then:
+\begin{itemize}[label=$\bullet$]
+  \item $q_{ans}=q_{YES}$ if $x \in L$
+  \item $q_{ans}=q_{NO}$ if $x \notin L$
+\end{itemize}
+The resources used by the oracle are hidden, the answer is given in a single step and the space used is the space needed to write the query. 
+\end{defbox}
+\begin{defbox}[Class with Oracle]
+  If $C$ is the class of problems that cab be solved in a certain amount of time/space with a turing machine of some kind (deterministic or not) then $C^L$ is the class of problems that can be solved in the same amount of time/space with the same kind of turing machine with oracle $L$.
+\end{defbox}
+\newpage
+\textbf{EXAMPLE}: Turing machine with oracle for \textsc{SAT-UNSAT}.\\
+The machine starts by copying the first part of the input $x;y$, that is $x$, on the second tape. Then it asks the oracle whether $x$ is satisfiable or not. The oracle will answer with $q_{YES}$ or $q_{NO}$. If the answer is $q_{NO}$ it rejects,but if the answers is $q_{YES}$ then the machine will clear the second tape and write $y$ on it. Then it asks the oracle whether $y$ is satisfiable or not. If the answer is $q_{NO}$ then the machine will accept, otherwise it will reject. 
+\begin{table}[ht]
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|c|c|c|c|c|c|c|c|l|}
+\hline
+\textbf{State} & \textbf{R 1} & \textbf{R 2} & \textbf{NS} & \textbf{W 1} & \textbf{M 1} & \textbf{W 2} & \textbf{M 2} & \textbf{Note} \\
+\hline
+$s$ & $\triangleright$ & $\triangleright$ & $s$ & $\triangleright$ & $\rightarrow$ & $\triangleright$ & $\rightarrow$ & \\
+$s$ & $x$ & $\blank$ & $s$ & $x$ & $\rightarrow$ & $x$ & $\rightarrow$ & $x \neq ;,\ x \neq \sqcup$ \\
+$s$ & $;$ & $\blank$ & $q_?$ & $;$ & $-$ & $\blank$ & $-$ & \\
+$q_{YES}$ & $;$ & $\blank$ & $r$ & $;$ & $-$ & $\blank$ & $\la$ & \\
+$q_{NO}$ & $;$ & $\blank$ & \texttt{"no"} & $;$ & $-$ & $\blank$ & $-$ & \\
+$r$ & $;$ & $x$ & $r$ & $;$ & $-$ & $\blank$ & $\leftarrow$ & $x \neq \triangleright$ \\  
+$r$ & $;$ & $\triangleright$ & $a$ & $;$ & $\ra$ & $\triangleright$ & $\rightarrow$ & \\
+$a$ & $x$ & $\blank$ & $a$ & $x$ & $\rightarrow$ & $x$ & $\ra$ & $x \neq \sqcup$ \\
+$a$ & $\sqcup$ & $\sqcup$ & $q_?$ & $\sqcup$ & $-$ & $\sqcup$ & $-$ & \\
+$q_{YES}$ & $\sqcup$ & $\sqcup$ & \texttt{"no"} & $\sqcup$ & $-$ & $\sqcup$ & $-$ & \\
+$q_{NO}$ & $\sqcup$ & $\sqcup$ & \texttt{"yes"} & $\sqcup$ & $-$ & $\sqcup$ & $-$ &  \\
+\hline
+\end{tabular}
+\\
+\end{center}
+\textsc{In all other cases reject}
+\caption{Transizioni della Macchina di Turing con stati speciali e oracolo}
+\end{table}
+\newpage
+\begin{defbox}[Proposition]
+  For every language $L$ \textsc{NP}-complete, $P^L=P^SAT$.
+\end{defbox}
+\begin{proof}
+  The proof is by reduction. We can reduce any problem in \textsc{NP} to \textsc{SAT} because \textsc{SAT} is \textsc{NP}-complete. The same thing holds for \textsc{L} since it is \textsc{NP}-complete.
+\end{proof}
+Since every oracle can be reduced to the others complete problems of the same class, we can use the complexity class it belongs to.\\
+\textbf{EXAMPLE}: $P^{NP}, NP^{NP}, EXP^{NP}$ instead of $P^{SAT}, NP^{TSP(D)}, EXP^{CLIQUE}$,\dots
+\begin{defbox}[Proposition]
+  $C^D=C^{coD}$
+\end{defbox}
+\begin{proof}
+  To prove this we can simply observe that if the switch the $q_{YES}$ and $q_{NO}$ states we can obtain a reduction from one to the other.\\
+\end{proof}
+

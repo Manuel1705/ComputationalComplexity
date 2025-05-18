@@ -1,0 +1,68 @@
+\section{Optimization problems}
+Optimization problems have not been classified in a satisfactory way within the theory of $P$ and $NP$; it is these problems that motivate the immediate extensions of this theory beyond $NP$.
+
+Let us take the traveling salesman problem as our working example. In the problem \textit{TSP} we are given the distance matrix of a set of cities; we want to find the shortest tour of the cities. We have studied the complexity of the \textit{TSP} within the framework of $P$ and $NP$ only indirectly: We defined the decision version \textit{TSP (D)}, and proved it $NP$-complete. For the purpose of understanding better the complexity of the traveling salesman problem, we now introduce two more variants.
+
+\textbf{EXACT TSP:} Given a distance matrix and an integer $B$, is the length of the shortest tour \textit{equal to} $B$? Also,  
+
+\textbf{TSP COST:} Given a distance matrix, compute the length of the shortest tour.
+
+The four variants can be ordered in ``increasing complexity'' as follows:
+\[
+\text{TSP (D); \quad EXACT TSP; \quad TSP COST; \quad TSP.}
+\]
+
+Each problem in this progression can be reduced to the next. For the last three problems this is trivial; for the first two one has to notice that the reduction in the corollary to the theorem proving that \textit{TSP (D)} is $NP$-complete can be used to reduce \textit{HAMILTON PATH} to \textit{EXACT TSP} (the graph has a Hamilton path if and only if the optimum tour has length \textit{exactly} $n + 1$). And since \textit{HAMILTON PATH} is $NP$-complete and \textit{TSP (D)} is in $NP$, we must conclude that there is a reduction from \textit{TSP (D)} to \textit{EXACT TSP}.
+
+Actually, we know that these four problems are \textit{polynomially equivalent} (since the first and the last one are). That is, there is a polynomial-time algorithm for one if and only if there is for all four. Admittedly, from the point of view of the practical motivation for complexity theory (namely, to identify problems that are likely to require exponential time) this coarse characterization should be good enough. However, reductions and completeness provide far more refined and interesting categorizations of problems. In this sense, of these four variants of the \textit{TSP} we know the precise complexity only of the $NP$-complete problem \textit{TSP (D)}. In this section we shall show that the other three versions of the \textit{TSP} are complete for some very natural extensions of $NP$. Is the \textit{EXACT TSP} in $NP$? Given a distance matrix and the alleged optimum cost $B$, how can we certify succinctly that the optimum cost is indeed $B$? The reader is invited to ponder about this question; no obvious solution comes to mind. It would be equally impressive if we could certify that the optimum cost \textit{is not} $B$; in other words, \textit{EXACT TSP} does not even appear to be in $coNP$. In fact, the results in this section will suggest that if \textit{EXACT TSP} is in $NP \cup coNP$, this would have truly remarkable consequences; the world of complexity would have to be vastly different than it is currently believed.
+
+However, \textit{EXACT TSP} is closely related to $NP$ and $coNP$ in at least one important way: Considered as a language, \textit{it is the intersection of a language in $NP$} (the \textit{TSP} language) \textit{and one in $coNP$} (the language \textit{TSP COMPLEMENT}, asking whether the optimum cost is \textit{at least} $B$). In other words, an input is a ``yes'' instance of \textit{EXACT TSP} if and only if it is a ``yes'' instance of \textit{TSP}, and a ``yes'' instance of \textit{TSP COMPLEMENT}. This calls for a definition:
+\begin{defbox}[Definition of DP Class]
+  A language $L$ is in the class \textit{DP} if and only if there are two languages $L_1 \in NP$ and $L_2 \in coNP$ such that $L = L_1 \cap L_2$.
+\end{defbox}
+We should warn the reader immediately against a quite common misconception: \textit{DP is not} $NP \cap coNP$\footnote{We mean, these two classes are not known or believed to be equal. In the absence of a proof that $P \neq NP$ one should not be too emphatic about such distinctions.}. There is a world of difference between these two classes. For one thing, \textit{DP} is not likely to be contained even in $NP \cup coNP$, let alone the much more restrictive $NP \cap coNP$. The intersection in the definition of $NP \cap coNP$ is in the domain of \textit{classes of languages}, not languages as with \textit{DP}.
+
+For another important difference between $NP \cap coNP$ and \textit{DP}, the latter is a perfectly syntactic class, and therefore has \textit{complete problems}. Consider for example the following problem:
+
+\textbf{SAT-UNSAT:} Given two Boolean expressions $\phi, \phi'$, both in conjunctive normal form with three literals per clause. Is it true that $\phi$ is satisfiable and $\phi'$ is not?
+\begin{defbox}[Theorem]
+    \textit{SAT-UNSAT} is \textit{DP}-complete.
+\end{defbox}
+\begin{proof}
+    To show that it is in \textit{DP} we have to exhibit two languages $L_1 \in NP$ and $L_2 \in coNP$ such that the set of all ``yes'' instances of \textit{SAT-UNSAT} is $L_1 \cap L_2$. This is easy: 
+\[
+L_1 = \{(\phi, \phi') : \phi \text{ is satisfiable}\} \quad \text{and} \quad L_2 = \{(\phi, \phi') : \phi' \text{ is unsatisfiable}\}.
+\]
+
+To show completeness, let $L$ be any language in \textit{DP}. We have to show that $L$ reduces to \textit{SAT-UNSAT}. All we know about $L$ is that there are two languages $L_1 \in NP$ and $L_2 \in coNP$ such that $L = L_1 \cap L_2$. Since \textit{SAT} is $NP$-complete, we know that there is a reduction $R_1$ from $L_1$ to \textit{SAT}, and a reduction $R_2$ from the complement of $L_2$ to \textit{SAT}. The reduction from $L$ to \textit{SAT-UNSAT} is this, for any input $x$:
+\[
+R(x) = (R_1(x), R_2(x)).
+\]
+
+We have that $R(x)$ is a ``yes'' instance of \textit{SAT-UNSAT} if and only if $R_1(x)$ is satisfiable and $R_2(x)$ is not, which is true if and only if $x \in L_1$ and $x \in L_2$, or equivalently $x \in L$.
+\end{proof}
+
+\textbf{OTHER DP-COMPLETE PROBLEMS:}
+\begin{itemize}[label=$\blacksquare$]
+    \item \textbf{EXACT TSP}
+    \begin{itemize}[label=$\bullet$]
+        \item We already shown the is in DP, the hardness cna be obtained by reduction from \textit{SAT-UNSAT}.
+    \end{itemize}
+    
+    \item \textbf{CRITICAL SAT}
+    \begin{itemize}[label=$\bullet$]
+        \item Given $\phi$ in CNF, tell if is unsatisfiable but removing any clause would make it satisfiable.
+    \end{itemize}
+    
+    \item \textbf{CRITICAL HAMILTON PATH}
+    \begin{itemize}[label=$\bullet$]
+        \item The given graph doesn't have hamiltonian paths, but adding any edge would make it have one.
+    \end{itemize}
+    
+    \item \textbf{CRITICAL 3-COLORING}
+    \begin{itemize}[label=$\bullet$]
+        \item The given graph is not 3-colorable, but removing any edge would make it 3-colorable.
+    \end{itemize}
+\end{itemize}
+    
+\textbf{UNIQUE SAT}: Given $\phi$ in CNF, tell if it has only one satisfying assignment. We don't know if it is \textit{DP}-complete we only know that it is in \textit{DP} and we don't know if it is in a smaller class. 

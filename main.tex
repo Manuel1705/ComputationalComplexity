@@ -41,7 +41,8 @@
 \geometry{a4paper, margin=1in}
 \pagestyle{fancy}
 \fancyhf{}
-\setlength{\headheight}{15pt}
+\setlength{\headheight}{27.05003pt} % Increased to avoid fancyhdr warning
+\addtolength{\topmargin}{-12.05003pt} % Optional: adjust top margin as suggested
 \fancyhead[L]{\leftmark}
 \fancyhead[R]{\thepage}
 \renewcommand{\baselinestretch}{1.2}
@@ -109,7 +110,7 @@ $$(q, w, u) \xrightarrow{M^*} (q', w', u'),$$
 if there is a $k \geq 0$ such that $(q, w, u) \xrightarrow{M^k} (q', w', u')$. 
 
 \subsection{Turing Machine for palindromes}
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=1\textwidth]{img/TM_palindrom.png}
 \end{figure}
@@ -191,7 +192,7 @@ Representing numbers in unary, instead of binary or decimal, is about the only p
 \end{defbox}
 
 \subsection{2-tape Turing Machine for palindromes}
-  \begin{figure}[h]
+  \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{img/2kTM_palindrom.png}
   \end{figure}
@@ -378,7 +379,7 @@ We say that nondeterministic Turing machine $N$ decides language $L$ \textit{in 
 (s, \triangleright, x) \stackrel{N^k}{\rightarrow} (q, u, w),
 \]
 then $k \leq f(|x|)$. That is, we require that $N$, besides deciding $L$, does not have computation paths longer than $f(n)$, where $n$ is the length of the input. Thus, we charge to a nondeterministic computation an amount of time that may be considered unrealistically small. The amount of time charged is the ``depth'' of the computational activity. Obviously, the ``total computational activity'' generated can be exponentially bigger.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{img/ndc.png}
     \caption{Nondeterministic computation}
@@ -725,7 +726,7 @@ Like all complexity classes, $\mathbf{NP}$ contains an infinity of languages. Of
 However, it is intuitively clear that the former two problems (\textsc{TSP (D)} and \textsc{SAT}) are somehow more representative of the complexity of $\mathbf{NP}$ than the latter two. They seem to capture more faithfully the power and complexity of $\mathbf{NP}$, and are not known (or believed) to be in $\mathbf{P}$ like the other two.
 
 To formalize the notion of one problem being ``at least as hard as'' another, we introduce the concept of \emph{reduction}. We say that problem $A$ is at least as hard as problem $B$ if $B$ reduces to $A$. That is, there is a transformation $R$ which, for every input $x$ of $B$, produces an equivalent input $R(x)$ of $A$, such that the answer to $R(x)$ for $A$ is the same as the answer to $x$ for $B$. In other words, to solve $B$ on input $x$, we just have to compute $R(x)$ and solve $A$ on it.
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.9\textwidth]{img/reduction.png}
   \caption{Reduction from $B$ to $A$}
@@ -836,14 +837,14 @@ The problem is in \textbf{NP}: Given a satisfiable Boolean expression, a nondete
 
 Let $L \in \mathbf{NP}$. We shall describe a reduction $R$ which for each string $x$ constructs a circuit $R(x)$ (with inputs that can be either variables or constants) such that $x \in L$ if and only if $R(x)$ is satisfiable. Since $L \in \mathbf{NP}$, there is a nondeterministic Turing machine $M = (K, \Sigma, \Delta, s)$ that decides $L$ in time $n^k$. That is, given a string $x$, there is an accepting computation (sequence of nondeterministic choices) of $M$ on input $x$ if and only if $x \in L$. We assume that $M$ has a single string; furthermore, we can assume that it has at each step \emph{two nondeterministic choices}.
  If for some state-symbol combinations there are $m > 2$ choices in $\Delta$, we modify $M$ by adding $m - 2$ new states so that the same effect is achieved (see Figure below). If for some combination there is only one choice, we consider that the two choices coincide; and finally if for some state-symbol combination there is no choice in $\Delta$, we add to $\Delta$ the choice that changes no state, symbol, or position. So, machine $M$ has exactly two choices for each symbol-state combination. One of these choices is called choice $0$ and the other choice $1$, so that a sequence of nondeterministic choices is simply a bitstring $(c_1, c_2, \ldots, c_{|x|^{k}-1}) \in \{0,1\}^{|x|^{k}-1}$.
- \begin{figure}[h]
+ \begin{figure}[ht]
   \centering
   \includegraphics[width=0.7\textwidth]{img/cook.png}
   \caption{Reducing degree of nondeterminism}
 \end{figure}
 \\
 Since the computation of nondeterministic Turing machines proceeds in parallel paths, there is no simple notion of computation table that captures all of the behavior of such a machine on an input. \emph{If, however, we fix a sequence of choices} $\mathbf{c} = (c_0, c_2, \ldots, c_{|x|^k - 1})$, then the computation is effectively deterministic (at the $i$th step we take choice $c_i$), and thus we can define the computation table $T(M, x, \mathbf{c})$ corresponding to the machine, input, and sequence of choices. Again the top row and the extreme columns of the table will be predetermined. All other entries $T_{ij}$ will depend only on the entries $T_{i-1,j-1}$, $T_{i-1,j}$, and $T_{i-1,j+1}$ and the choice $c_{i-1}$ at the previous step (see Figure).
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.5\textwidth]{img/cook2.png}
   \caption{The construction for Cook's theorem}
@@ -923,7 +924,7 @@ Let $G = (V, E)$ be an undirected graph, and let $I \subseteq V$. We say that th
   The proof uses a simple gadget, the \textit{triangle}. The point is that if a graph contains a triangle, then any independent set can obviously contain at most one node of the triangle. But there is more to the construction.
 
 Interestingly, to prove that \textsc{INDEPENDENT SET} is \textbf{NP}-complete it is best to \textit{restrict the class of graphs} we consider. Although restricting the domain makes a problem easier, in this case the restriction is such that it retains the complexity of the problem, while making the issues clearer. We consider only graphs \textit{whose nodes can be partitioned in $m$ disjoint triangles} (see Figure).
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=1\textwidth]{img/independent_set.png}
   \caption{Reduction to independent set}
@@ -972,7 +973,7 @@ This brings about an interesting point: Problems in graph theory can be guises o
   Recall that the \textsc{K-COLORING} problem is the problem of deciding whether a given graph can be colored with k colors such that no two adjacent nodes have the same color. The \textsc{2-COLORING} problem is in P. Now let's dimostrate that \textsc{3-COLORING} is NP-complete. To prove that \textsc{3-COLORING} is in NP, is easy. We can generate nondeterministically a color for every node and check in polynomial time if the graph is 3-colorable.
   The total cost in $O(n^3)$. To prove that \textsc{3-COLORING} is NP-complete, we can reduce \textsc{3SAT} to \textsc{3-COLORING}. We will use 2 gadget. The first one codifies the truth assignments.
   \\
-  \begin{figure}[h]
+  \begin{figure}[ht]
   \centering
   \includegraphics[width=0.5\textwidth]{img/3-coloring-1g.png}
   \caption{1st gadget}
@@ -980,7 +981,7 @@ This brings about an interesting point: Problems in graph theory can be guises o
   \\
    Every proposition $v_i$ is colored as $T$ or $F$. Every negative literal $\overline{v_i}=\neg v_i$ is colored the opposite way. The second gadget codifies the OR. If $p,q$ are both colored with $F$ then $p\vee q$ is $F$ as well otherwise it can always be colored with $T$.
    \\
-   \begin{figure}[h]
+   \begin{figure}[ht]
     \centering
     \begin{subfigure}[b]{0.3\textwidth}
         \includegraphics[width=\textwidth]{img/3-coloring-2g.png}
@@ -1004,7 +1005,7 @@ This brings about an interesting point: Problems in graph theory can be guises o
 \end{figure}
 \\
 The or are connected in cascade to represent the 3 clauses. If $a,b,c$ are colored with F the $a\vee b\vee c$ is colored with F as well otherwise it can be colored with T. 
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.5\textwidth]{img/3-coloring-3g.png}
   \caption{OR cascade}
@@ -1012,7 +1013,7 @@ The or are connected in cascade to represent the 3 clauses. If $a,b,c$ are color
 \\
 To ensure that the clauses are satisfied we connect the clauses output like this:
 \\
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.5\textwidth]{img/3-coloring-4g.png}
   \caption{Final graph}
@@ -1021,7 +1022,7 @@ To ensure that the clauses are satisfied we connect the clauses output like this
 This way we can ensure that the clauses are satisfied because at least one of the literals must be colored with T otherwise the final node would be colored with F.
 \end{proof}
 Complete example:\\
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.9\textwidth]{img/3-coloring-example.png}
   \caption{complete example}
@@ -1062,7 +1063,7 @@ In the recognition version, called \textsc{KNAPSACK}, we are also given a goal $
   This is another case in which restricting the problem facilitates the \textbf{NP}-completeness proof. We are going to look at the special case of \textsc{KNAPSACK} in which $v_i = w_i$ for all $i$, and $K = W$. That is, we are given a set of $n$ integers $w_1, \ldots, w_n$, and another integer $K$, and we wish to find out if a subset of the given integers adds up to exactly $K$. This simple numerical problem turns out to be \textbf{NP}-complete.
 
 We shall reduce \textsc{EXACT COVER BY 3-SETS} to it. We are given an instance $\{S_1, S_2, \ldots, S_n\}$ of \textsc{EXACT COVER BY 3-SETS}, where we are asking whether there are disjoint sets among the given ones that cover the set $U = \{1, 2, \ldots, 3m\}$. Think of the given sets as bit vectors in $\{0, 1\}^{3m}$. Such vectors can also be thought as binary integers, and set union now resembles integer addition (see Figure).
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.5\textwidth]{img/knapsack.png}
   \caption{Reduction to knapsack}
@@ -1098,7 +1099,7 @@ If a problem remains \textbf{NP}-complete even if any instance of length $n$ is 
 \subsection{Exercises}
 \subsubsection{exercise 1}
 Given a graph:
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.5\textwidth]{img/es1.png}
 \end{figure}
@@ -1112,7 +1113,7 @@ $\{1\}$\\
 $\{1\}$
 \subsubsection{exercise 2}
 Premise: The fragment of Schönfinkel-Bernays is a formula of first order logic where there are no function symbols, no equality, and in prenex normal form (that is, all the quantifiers are at the beginning of the formula). Schönfinkel-Bernays SAT problem has been shown to be NEXP-complete.
-Say if there exists a reduction form the following problems:
+Tell if there exists a reduction form the following problems:
 \begin{itemize}
   \item \textsc{SAT} to \textsc{TSP(D)}\\
   YES, because they are both NP-complete problems.
@@ -1138,7 +1139,7 @@ Say if there exists a reduction form the following problems:
 \subsubsection{exercise 3}
 Specify a format for a succinct certificate for the \textsc{3-COLORING} problem (that is, a string no too long with respect to the input that represents a solution to the problem). A valid format could be a string with the couples $(i,j)$ where $i$ is the node and $j$ is the color. The node index could be in positional representation so it would be a string of length $O(\log n)$ and the color could be a single character. So the final string would be of length $O(n \log n)$ which is polynomial with respect to the input.\\
 Show a certificate for the following graph:
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.5\textwidth]{img/es3.png}
 \end{figure}
@@ -1208,7 +1209,7 @@ The problems in $coNP$ that are $coNP$-complete are the least likely to be in $P
   So, problems in $NP$ have succinct certificates, whereas problems in $coNP$ have succinct disqualifications. $NP \cap coNP$ is the class of problems that have both! That is, problems in $NP \cap coNP$ have the following property: Each instance either has a succinct certificate (in which case it is a ``yes'' instance) or it has a succinct disqualification (in which case it is a ``no'' instance). No instance has both. The nature of certificates and disqualifications will be very different, and different algorithms will be used to validate them. But exactly one of the two always exists. Obviously, any problem in $P$ is also in $NP \cap coNP$, but there are examples of problems in $NP \cap coNP$ that are not known to be in $P$.
 \subsection{Exercises}
 \subsubsection{exercise 1}
-Say if there is a reduction between the following problems:
+Tell if there is a reduction between the following problems:
 \begin{itemize}
   \item \textsc{SAT} to \textsc{VALIDITY}\\
   \textsc{SAT}$\in NP$ and \textsc{VALIDITY}$\in coNP$ so would be true if \textsc{NP=coNP} but we don't know that.
@@ -1228,7 +1229,7 @@ Say if there is a reduction between the following problems:
   Would be true if \textsc{PRIMES} were P-complete and P=\textsc{NP} but we don't know that.
 \end{itemize}
 \subsubsection{exercise 2}
-Assume that $\NP\not=\coNP$. Say if there exist a reduction between the following problems:
+Assume that $\NP\not=\coNP$. Tell if there exist a reduction between the following problems:
 \begin{itemize}
   \item \textsc{SAT} to \textsc{VALIDITY}\\
   No, because \textsc{SAT} is NP-complete and \textsc{VALIDITY} is co\textsc{NP}-complete. So if there was a reduction from \textsc{SAT} to \textsc{VALIDITY} then we would have that \textsc{NP}=\textsc{coNP}.
@@ -1251,4 +1252,13 @@ Assume that $\NP\not=\coNP$. Say if there exist a reduction between the followin
   \item \textsc{3-COLORING} to \textsc{MAX-FLOW}\\
   No, because \textsc{3-COLORING} is NP-complete and \textsc{MAX-FLOW} is in P. So if there was a reduction from \textsc{3-COLORING} to \textsc{MAX-FLOW} then we would have that \textsc{NP}=\textsc{P}=\textsc{coNP}.
 \end{itemize}
+\subsubsection{exercise 3}
+Let $L_1$ be \textsc{PSPACE}-complete and $L_2$ be \textsc{NPSPACE}-complete. Tell if there exist a reduction between $L_1$ and $L_2$.
+
+
+Yes, because \textsc{PSPACE} = \textsc{NPSPACE}. So it is true for both directions.
+
+\include{optimizitation}
+\include{oracle}
+
 \end{document}
