@@ -45,7 +45,7 @@ $q_{NO}$ & $\sqcup$ & $\sqcup$ & \texttt{"yes"} & $\sqcup$ & $-$ & $\sqcup$ & $-
 \end{table}
 \newpage
 \begin{defbox}[Proposition]
-  For every language $L$ \textsc{NP}-complete, $P^L=P^SAT$.
+  For every language $L$ \textsc{NP}-complete, $P^L=P^{SAT}$.
 \end{defbox}
 \begin{proof}
   The proof is by reduction. We can reduce any problem in \textsc{NP} to \textsc{SAT} because \textsc{SAT} is \textsc{NP}-complete. The same thing holds for \textsc{L} since it is \textsc{NP}-complete.
@@ -58,4 +58,9 @@ Since every oracle can be reduced to the others complete problems of the same cl
 \begin{proof}
   To prove this we can simply observe that if the switch the $q_{YES}$ and $q_{NO}$ states we can obtain a reduction from one to the other.\\
 \end{proof}
+We can se $P^{NP}$ as a generalization of $DP$. Obviously  $DP \subseteq P^{NP}$.
+Some oracles are useless, for example $P^{P} = P$ and $NP^{P} = NP$ because every call to the oracle can be expanded in line without changing the complexity of the problem. We 't know if $NP^{NP} = NP$. We will analyze this problem in the next section.
+
+
+
 
