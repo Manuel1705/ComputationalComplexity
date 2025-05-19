@@ -62,4 +62,87 @@ The statements of many results in complexity theory end like that of Theorem 17.
 If $\mathbf{P} = \mathbf{NP}$, or even if $\mathbf{NP} = \mathbf{coNP}$, the polynomial hierarchy collapses to the first level.
 \end{defbox}
 The last corollary makes one thing abundantly clear: In the absence of a proof that $\mathbf{P} \neq \mathbf{NP}$, there is no hope of proving that the polynomial ``hierarchy'' is indeed a hierarchy of classes each properly containing the next (although, once again, we strongly believe that it is).
-The non-monotonic logics were introduced in AI to allow reasoning with incomplete information. The idea is to make plausible assumption that could end up being false in the future. Some examples of non-monotonic logics are Circumscription, Default logic and Answer Set Programming (ASP). The reasoning in the proposition versione of these logics is positioned at the 2° level of the polynomial hierarchy. 
+The non-monotonic logics were introduced in AI to allow reasoning with incomplete information. The idea is to make plausible assumption that could end up being false in the future. Some examples of non-monotonic logics are Circumscription, Default logic and Answer Set Programming (ASP). The reasoning in the proposition versione of these logics is positioned at the 2° level of the polynomial hierarchy.
+\begin{defbox}[The Yale shooting problem]
+    If we shoot a turkey with a loaded gun, the turkey is dead. We want to derive that: After reloading the gun and after shooting (in this order), the turkey is dead. The possible actions at time $t$ are: $\text{load}_t, \text{unload}_t, \text{shoot}_t$.
+\end{defbox}
+Let's model the problem in propositional logic.
+\begin{align*}
+    &\text{load}_t\to \text{loaded}_{t+1}\\
+    &\text{unload}_t\to \neg \text{loaded}_{t+1}\\
+    &\text{loaded}_t\land \text{shoot}_t\to \text{dead}_{t+1}\\
+    &\text{load}_0 \\
+    &\text{shoot}_1 
+\end{align*}
+Can we conclude that $\text{dead}_2$? 
+\\
+Yes, we can. It's a logical consequence of the axioms.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{img/ysp1.jpeg}
+\end{figure}
+\\
+What about the following situation?
+\begin{align*}
+    &\text{load}_t\to \text{loaded}_{t+1}\\
+    &\text{unload}_t\to \neg \text{loaded}_{t+1}\\
+    &\text{loaded}_t\land \text{shoot}_t\to \text{dead}_{t+1}\\
+    &\text{load}_0 \\
+    &\text{shoot}_2
+\end{align*}
+Can we conclude $\text{dead}_3$?\\
+No, we can't. There is nothing that tells us $\text{loaded}_1 \implies \text{loaded}_2$. That is, nothing tells us that the gun is not unloaded at time 1.\\
+Let's try to fix that. 
+\begin{align*}
+    &\text{load}_t\to \text{loaded}_{t+1}\\
+    &\text{unload}_t\to \neg \text{loaded}_{t+1}\\
+    &\text{loaded}_t\land \text{shoot}_t\to \text{dead}_{t+1}\\
+    &\text{loaded}_t\land\neg\text{unloaded}_t\to \text{loaded}_{t+1}\\
+    &\text{load}_0 \\
+    &\text{shoot}_2
+\end{align*}
+Can we conclude $\text{dead}_3$?\\
+No, we can't. The gun could be unloaded at time 1. In logic, all that is not specified is not assumed to be false but is not known. So we would need to explicitly say that the gun is not unloaded at time 1. This would be also needed in all successive time steps $[0,t]$. This is not feasible. The commonsense reasoning aims to support a more reasonable representation using non-monotonic logics.\\
+Let KB be the set of axioms of the Yale shooting problem. We want to conclude $\text{dead}_3$ from KB assuming that the gun is not unloaded if not specified. In this case the logic is non-monotonic because the set of consequences is not increasing with the addition of new axioms. In the classical logic if KB $\subseteq$ KB' then KB $\vDash$ $\phi$ implies KB' $\vDash$ $\phi$. That is, we cannot invalidate a conclusion by adding new axioms. In the non-monotonic logic, this is not true. We can invalidate a conclusion by adding new axioms.\\
+The \textbf{Circumscription} is a non-monotonic logic that allows to reason with incomplete information. The idea is to assume that the world is as simple as possible. In the Yale shooting problem, we can assume that the gun is not unloaded if not specified. This kind of logic is a combination of \textbf{SAT} and a problem of maximization where we want to maximize the number of conclusion that we can draw from the axioms by reducing them. This is what makes the complexity of the problem raise from the 1° level of the polynomial hierarchy to the 2° level.\\
+\begin{defbox}[Circumscription]
+Let M be the set of propositions that represent abnormal situations, that is the situations that we want to avoid thus we want to make as false as possible. A truth assignment T is preferred (more normal than) to T' iff for every propositional symbol $p\in M$, $T'(p)=\text{false}\implies T(p)=\text{false}$, that is T is at least as normal as T'. In this case we write $T\leq_M T'$. The models of a set of axioms KB (in Circumscription) are the truth assignments T that satisfy KB $(T\vDash KB)$ such that per every T' that satisfies KB, $T'\leq_M T\implies T\le_M T'$. If $\phi$ is true in every model of KB, we write $KB\vDash_M \phi$ and we say that $\phi$ is a logical consequence of KB.\\
+\end{defbox}
+Now let's see how to use Circumscription to solve the Yale shooting problem. We want to prove that $\text{dead}_3$ is a logical consequence of the axioms. $M={ab_t | t\in\mathbb{N}}$
+\begin{align*}
+    &\text{load}_t\to \text{loaded}_{t+1}\\
+    &\text{unload}_t\to \neg \text{loaded}_{t+1}\\
+    &\text{loaded}_t\land \text{shoot}_t\to \text{dead}_{t+1}\\
+    &\text{loaded}_t\land\neg\text{ab}_t\to \text{loaded}_{t+1}\\
+    &\text{load}_0 \\
+    &\text{shoot}_2
+\end{align*}
+The models here are completely normal: all the $ab_t$ are false. We can derive that $\text{dead}_3$ (KB $\vDash_M$ $\text{dead}_3$).
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{img/ysp2.jpeg}
+\end{figure}
+\\
+What about if the gun is unloaded at time 1? 
+\begin{align*}
+    &\text{load}_t\to \text{loaded}_{t+1}\\
+    &\text{unload}_t\to \neg \text{loaded}_{t+1}\\
+    &\text{loaded}_t\land \text{shoot}_t\to \text{dead}_{t+1}\\
+    &\text{loaded}_t\land\neg\text{ab}_t\to \text{loaded}_{t+1}\\
+    &\text{load}_0 \\
+    & \textsl{unload}_1 \\
+    &\text{shoot}_2
+\end{align*}
+In this case $\text{unload}_1$ makes $\text{ab}_1$
+true in every model of KB to avoid the contradiction $\text{loaded}_2\land \neg\text{loaded}_2$. So we can derive that $\text{dead}_3$ is not a logical consequence of KB.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{img/ysp3.jpeg}
+\end{figure}\\
+This logic is very flexible, even if we assume $\neg\text{dead}_3$ this makes $\text{ab}_1$ true in every model of KB. So we can derive that $\text{dead}_3$ is not a logical consequence of KB.
+\begin{defbox}[Theorem (CIRC SAT and CIRC VALIDITY)]
+    Deciding whether a model of KB satisfies $\phi$ is $\Sigma_2\mathbf{P}$-complete.\\
+    Deciding whether KB $\vDash_M \phi$ is $\Pi_2\mathbf{P}$-complete.
+\end{defbox}
+Notice that CIRC SAT $\eqsim$ SAT + minimization of abnormality predicates. As often happens, the complexity of the problem increases when we try to optimize (in this case with minimization) the solution.
+
