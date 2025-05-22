@@ -166,12 +166,31 @@ omitted
 \subsection{Exercise}
 Tell if there exist a reduction between the following problems:
 \begin{itemize}
-    \item $\mathbf{QSAT_2 \; e \; QSAT_4}$
-    \item $\mathbf{QSAT_i \; e \; \overline{QSAT_i}}$
-    \item $\mathbf{CLIQUE \; e \; QSAT_1}$
-    \item $\mathbf{CLIQUE \; e \; QSAT_2}$
-    \item $\mathbf{CLIQUE \; e \; \overline{QSAT_1}}$
-    \item $\mathbf{CLIQUE \; e \; \overline{QSAT_2}}$
-    \item $\mathbf{SAT-UNSAT \; e \; QSAT_3}$
-    \item $\mathbf{SAT-UNSAT \; e \; \overline{QSAT_3}}$
+    \item $\mathbf{QSAT_2 \; e \; QSAT_4}$\\
+    Yes, because $QSAT_4$ is $\Sigma_4\mathbf{P}$-complete and since $QSAT_2\in\Sigma_2\mathbf{P}\subseteq\Sigma_4\mathbf{P}$
+    \item $\mathbf{QSAT_4 \; e \; QSAT_2}$\\
+    We don't know and if it were the case the polynomial hierarchy would collapse to the 2° level.
+    \item $\mathbf{QSAT_i \; e \; \overline{QSAT_i}}$\\
+    We don't know and if it were the case we would have that $\Sigma_i\mathbf{P}=\Pi_i\mathbf{P}$ and the polynomial hierarchy would collapse to the $i$th level.
+    Same for the other way around.
+    \item $\mathbf{CLIQUE \; e \; QSAT_1}$\\
+    Yes, because $QSAT_1$ is $\Sigma_1\mathbf{P}$-complete and since $CLIQUE$ is \textbf{NP}-complete and $\textbf{NP}=\Sigma_1\mathbf{P}$ they are complete for the same class. Same for the other way around.
+    \item $\mathbf{CLIQUE \; e \; QSAT_2}$\\
+    Yes, because $QSAT_2$ is $\Sigma_2\mathbf{P}$-complete, $CLIQUE$ is $\Sigma_1\mathbf{P}$-complete and we know that $\Sigma_1\mathbf{P}\subseteq\Sigma_2\mathbf{P}$ 
+    \item $\mathbf{QSAT_2 \; e \; CLIQUE}$\\
+    We don't know and if it were the case the polynomial hierarchy would collapse to the 1° level.
+    \item $\mathbf{CLIQUE \; e \; \overline{QSAT_1}}$\\
+    We don't know and if it were the case we would have that $\Sigma_1\mathbf{P}=\Pi_1\mathbf{P}$ and the polynomial hierarchy would collapse to the 1° level. Same for the other way around.
+    \item $\mathbf{CLIQUE \; e \; \overline{QSAT_2}}$\\
+    Yes, because $CLIQUE$ is $\Sigma_1\mathbf{P}$-complete, $\overline{QSAT_2}$ is $\Pi_2\mathbf{P}$-complete and we know that $\Sigma_1\mathbf{P}\subseteq\Pi_2\mathbf{P}$.
+    \item $\mathbf{ \overline{QSAT_2}\; e \;CLIQUE }$\\
+    We don't know and if it were the case we would have that $\Sigma_1\mathbf{P}=\Pi_2\mathbf{P}$ and the polynomial hierarchy would collapse to the 1° level.
+    \item $\mathbf{SAT-UNSAT \; e \; QSAT_3}$\\
+    Yes, because SAT-UNSAT is \textbf{DP}-complete and $QSAT_3$ is $\Sigma_3\mathbf{P}$-complete. We know that $\textbf{DP}\subseteq\Delta_2\mathbf{P}\subseteq\Sigma_3\mathbf{P}$.
+    \item $\mathbf{ QSAT_3\; e \;SAT-UNSAT }$\\
+    We don't know and if it were the case we would have that $\Sigma_3\mathbf{P}=\textbf{DP}$ and the polynomial hierarchy would collapse \textbf{at least} to the 2° level. We don't know if the polynomial hierarchy would collapse to the 1° level.
+    \item $\mathbf{SAT-UNSAT \; e \; \overline{QSAT_3}}$\\
+    Yes, because SAT-UNSAT is \textbf{DP}-complete and $\overline{QSAT_3}$ is $\Pi_3\mathbf{P}$-complete. We know that $\textbf{DP}\subseteq\Delta_2\mathbf{P}\subseteq\Pi_3\mathbf{P}$.
+    \item $\mathbf{ \overline{QSAT_3}\; e \;SAT-UNSAT }$\\
+    We don't know and if it were the case we would have that $\Pi_3\mathbf{P}=\textbf{DP}$ and the polynomial hierarchy would collapse \textbf{at least} to the 2° level. We don't know if the polynomial hierarchy would collapse to the 1° level.
 \end{itemize}
