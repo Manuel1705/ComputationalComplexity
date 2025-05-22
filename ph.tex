@@ -163,34 +163,121 @@ where $Q$ is $\exists$ if $i$ is odd and $\forall$ if $i$ is even, and where the
 \begin{proof}
 omitted
 \end{proof}
+\begin{defbox}[Theorem]
+    CIRC SAT is $\Sigma_2\mathbf{P}$-complete. That is, the problem of deciding whether a formula $\phi$ is true in a model of KB (in the Circumscription logic) is $\Sigma_2\mathbf{P}$-complete.
+\end{defbox}
+\begin{proof}
+    By reduction from $QSAT_2$. Omitted.
+\end{proof}
+\begin{defbox}
+    STRATEGIC COMPANIES is $\Sigma_2\mathbf{P}$-complete.
+\end{defbox}
+\begin{proof}
+    By reduction from $QSAT_2$. Omitted.
+\end{proof}
+We know that every level of the polynomial hierarchy has same problems that are complete for that level. We don't know if there are problems that are complete for the whole polynomial hierarchy. Is set of all the QBF formulae complete for the whole polynomial hierarchy? Even if seams reasonable to think so the answer is no. Actually it's \textbf{PSPACE}-complete. If we discovered the existence of a problem that is complete for the whole polynomial hierarchy we would have same big consequences.
+\begin{defbox}[Theorem 17.11]
+    If there was a \textbf{PH}-complete problem, then the polynomial hierarchy would collapse to some finite level.
+\end{defbox}
+\begin{proof}
+Suppose that $L$ is \textbf{PH}-complete. Since $L \in \textbf{PH}$, there is an $i \geq 0$ such that $L \in \Sigma_i\mathbf{P}$. But any language $L' \in \Sigma_{i+1}\mathbf{P}$ reduces to $L$. Since all levels of the polynomial hierarchy are closed under reductions, this means that $L' \in \Sigma_i\mathbf{P}$, and hence $\Sigma_i\mathbf{P} = \Sigma_{i+1}\mathbf{P}$.
+\end{proof}
+\begin{defbox}[Proposition]
+    $\textbf{PH}\subseteq\textbf{PSPACE}$
+\end{defbox}
+But is $\mathbf{PH} = \mathbf{PSPACE}$? This is an open and intriguing question. However, notice this curious fact:
+\begin{defbox}[Corollary]
+ If $\mathbf{PH} = \mathbf{PSPACE}$ then by Theorem 17.11 $\mathbf{PH}$ has complete problems ($\mathbf{PSPACE}$ has), and thus the polynomial hierarchy collapses.
+\end{defbox}
+\begin{defbox}[Definition]
+    QSAT is the problem of deciding whether a QBF is true. 
+\end{defbox}
+\begin{defbox}[Theorem]
+    QSAT is \textbf{PSPACE}-complete.
+\end{defbox}
+\begin{proof}
+    Omitted.
+\end{proof}
+
 \subsection{Exercise}
+\subsubsection{Exercise 1}
 Tell if there exist a reduction between the following problems:
 \begin{itemize}
-    \item $\mathbf{QSAT_2 \; e \; QSAT_4}$\\
+    \item $\mathbf{QSAT_2 \; to \; QSAT_4}$\\
     Yes, because $QSAT_4$ is $\Sigma_4\mathbf{P}$-complete and since $QSAT_2\in\Sigma_2\mathbf{P}\subseteq\Sigma_4\mathbf{P}$
-    \item $\mathbf{QSAT_4 \; e \; QSAT_2}$\\
+    \item $\mathbf{QSAT_4 \; to \; QSAT_2}$\\
     We don't know and if it were the case the polynomial hierarchy would collapse to the 2° level.
-    \item $\mathbf{QSAT_i \; e \; \overline{QSAT_i}}$\\
+    \item $\mathbf{QSAT_i \; to \; \overline{QSAT_i}}$\\
     We don't know and if it were the case we would have that $\Sigma_i\mathbf{P}=\Pi_i\mathbf{P}$ and the polynomial hierarchy would collapse to the $i$th level.
     Same for the other way around.
-    \item $\mathbf{CLIQUE \; e \; QSAT_1}$\\
+    \item $\mathbf{CLIQUE \; to \; QSAT_1}$\\
     Yes, because $QSAT_1$ is $\Sigma_1\mathbf{P}$-complete and since $CLIQUE$ is \textbf{NP}-complete and $\textbf{NP}=\Sigma_1\mathbf{P}$ they are complete for the same class. Same for the other way around.
-    \item $\mathbf{CLIQUE \; e \; QSAT_2}$\\
+    \item $\mathbf{CLIQUE \; to \; QSAT_2}$\\
     Yes, because $QSAT_2$ is $\Sigma_2\mathbf{P}$-complete, $CLIQUE$ is $\Sigma_1\mathbf{P}$-complete and we know that $\Sigma_1\mathbf{P}\subseteq\Sigma_2\mathbf{P}$ 
-    \item $\mathbf{QSAT_2 \; e \; CLIQUE}$\\
+    \item $\mathbf{QSAT_2 \; to \; CLIQUE}$\\
     We don't know and if it were the case the polynomial hierarchy would collapse to the 1° level.
-    \item $\mathbf{CLIQUE \; e \; \overline{QSAT_1}}$\\
+    \item $\mathbf{CLIQUE \; to \; \overline{QSAT_1}}$\\
     We don't know and if it were the case we would have that $\Sigma_1\mathbf{P}=\Pi_1\mathbf{P}$ and the polynomial hierarchy would collapse to the 1° level. Same for the other way around.
-    \item $\mathbf{CLIQUE \; e \; \overline{QSAT_2}}$\\
+    \item $\mathbf{CLIQUE \; to \; \overline{QSAT_2}}$\\
     Yes, because $CLIQUE$ is $\Sigma_1\mathbf{P}$-complete, $\overline{QSAT_2}$ is $\Pi_2\mathbf{P}$-complete and we know that $\Sigma_1\mathbf{P}\subseteq\Pi_2\mathbf{P}$.
-    \item $\mathbf{ \overline{QSAT_2}\; e \;CLIQUE }$\\
+    \item $\mathbf{ \overline{QSAT_2}\; to \;CLIQUE }$\\
     We don't know and if it were the case we would have that $\Sigma_1\mathbf{P}=\Pi_2\mathbf{P}$ and the polynomial hierarchy would collapse to the 1° level.
-    \item $\mathbf{SAT-UNSAT \; e \; QSAT_3}$\\
+    \item $\mathbf{SAT-UNSAT \; to \; QSAT_3}$\\
     Yes, because SAT-UNSAT is \textbf{DP}-complete and $QSAT_3$ is $\Sigma_3\mathbf{P}$-complete. We know that $\textbf{DP}\subseteq\Delta_2\mathbf{P}\subseteq\Sigma_3\mathbf{P}$.
-    \item $\mathbf{ QSAT_3\; e \;SAT-UNSAT }$\\
+    \item $\mathbf{ QSAT_3\; to \;SAT-UNSAT }$\\
     We don't know and if it were the case we would have that $\Sigma_3\mathbf{P}=\textbf{DP}$ and the polynomial hierarchy would collapse \textbf{at least} to the 2° level. We don't know if the polynomial hierarchy would collapse to the 1° level.
-    \item $\mathbf{SAT-UNSAT \; e \; \overline{QSAT_3}}$\\
+    \item $\mathbf{SAT-UNSAT \; to \; \overline{QSAT_3}}$\\
     Yes, because SAT-UNSAT is \textbf{DP}-complete and $\overline{QSAT_3}$ is $\Pi_3\mathbf{P}$-complete. We know that $\textbf{DP}\subseteq\Delta_2\mathbf{P}\subseteq\Pi_3\mathbf{P}$.
-    \item $\mathbf{ \overline{QSAT_3}\; e \;SAT-UNSAT }$\\
+    \item $\mathbf{ \overline{QSAT_3}\; to \;SAT-UNSAT }$\\
     We don't know and if it were the case we would have that $\Pi_3\mathbf{P}=\textbf{DP}$ and the polynomial hierarchy would collapse \textbf{at least} to the 2° level. We don't know if the polynomial hierarchy would collapse to the 1° level.
 \end{itemize}
+\subsubsection{Exercise 2}
+Let's suppose that all the levels of the polynomial hierarchy are distinct. For which $i$ the reduction exists?
+\begin{itemize}
+    \item $\mathbf{from \; QSAT_i \; to \; QSAT_{i+1}}$\\
+    It's true for all $i$. Would be true even without the assumption of distinct levels.
+    \item $\mathbf{from \; QSAT_i \; to \; \overline{QSAT_{i+1}}}$\\
+    It's true for all $i$. Would be true even without the assumption of distinct levels.
+    \item $\mathbf{from \; QSAT_i \; to \; \overline{QSAT_i}}$\\
+    It's false for all $i$. Otherwise the hierarchy would collapse to the $i$th level and that would be a contradiction.
+    \item $\mathbf{from \; \overline{QSAT_i} \; to \; QSAT_{i+1}}$\\
+    It's true for all $i$. Would be true even without the assumption of distinct levels.
+    \item $\mathbf{from \; QSAT_i \; to \; TSP(D)}$\\
+    It's true only for $i=1$.
+    \item $\mathbf{from \; QSAT_i \; to \; VALIDITY}$\\
+    Notice that $QSAT_0$ is not a real problem because it would not have any quantifier so it would not be a QBF. So there is no reduction because otherwise the hierarchy would collapse to the 1° level and that would be a contradiction. So it's false for all $i$.
+    \item $\mathbf{from \; VALIDITY \; to \;QSAT_i }$\\
+    it's true for all $i\ge 2$. For $i=1$ we would have that the hierarchy would collapse to the 1° level and that would be a contradiction.
+\end{itemize}
+\subsubsection{Exercise 3}
+Let's suppose that \textbf{PH} as no complete problems. Is there a reduction between the following problems?
+\begin{itemize}
+    \item $\mathbf{QSAT_1 \; to \; QSAT_4}$\\
+    Yes.
+    \item $\mathbf{QSAT_4 \; to \; QSAT_1}$\\
+    No, otherwise the polynomial hierarchy would collapse to the 1° level. 
+    \item $\mathbf{QSAT_i \; to \; \overline{QSAT_i}}$\\
+    No, for both directions. Otherwise the polynomial hierarchy would collapse to the $i$th level.
+    \item $\mathbf{CLIQUE \; to \; QSAT_1}$\\
+    Yes, because they are both $\Sigma_1\mathbf{P}$-complete. 
+    \item $\mathbf{CLIQUE \; to \; CIRC \; SAT}$\\
+    Yes, because $CIRC \; SAT$ is $\Sigma_2\mathbf{P}$-complete and $CLIQUE$ is $\Sigma_1\mathbf{P}$-complete. We know that $\Sigma_1\mathbf{P}\subseteq\Sigma_2\mathbf{P}$.
+    \item $\mathbf{ CIRC \; SAT\; to \;CLIQUE }$\\
+    No, otherwise the polynomial hierarchy would collapse to the 1° level.
+    \item $\mathbf{ \overline{QSAT_1}\; to \; CLIQUE}$\\
+    No , because CLIQUE is $\Sigma_1\mathbf{P}$-complete and $\overline{QSAT_1}$ is $\Pi_1\mathbf{P}$-complete. Otherwise the polynomial hierarchy would collapse to the 1° level.
+    \item $\mathbf{CLIQUE \; to \; \overline{STRATEGIC \; COMPANIES}}$\\
+    Yes, because $CLIQUE$ is $\Sigma_1\mathbf{P}$-complete and $\overline{STRATEGIC \; COMPANIES}$ is $\Pi_2\mathbf{P}$-complete. We know that $\Sigma_1\mathbf{P}\subseteq\Pi_2\mathbf{P}$.
+    \item $\mathbf{\overline{STRATEGIC \; COMPANIES} \; to \;CLIQUE }$\\
+    No, otherwise the polynomial hierarchy would collapse to the 1° level.
+    \item $\mathbf{QSAT \; to \; QSAT_3}$\\
+    No, because $QSAT$ is \textbf{PSPACE}-complete and $QSAT_3$ is $\Sigma_3\mathbf{P}$-complete. Otherwise the polynomial hierarchy would collapse to the 3° level.
+    \item $\mathbf{QSAT_3 \; to \;QSAT }$\\
+    Yes, because $QSAT$ is \textbf{PSPACE}-complete and $QSAT_3$ is $\Sigma_3\mathbf{P}$-complete. We know that $\Sigma_3\mathbf{P}\subseteq\textbf{PSPACE}$.
+    \item $\mathbf{QSAT \; to \; \overline{HAMILTON \; PATH}}$\\
+    No, because $QSAT$ is \textbf{PSPACE}-complete and $\overline{HAMILTON \; PATH}$ is $\Pi_2\mathbf{P}$-complete. Otherwise the polynomial hierarchy would collapse to the 2° level.
+    \item $\mathbf{\overline{HAMILTON \; PATH} \; to \; QSAT}$\\
+    Yes, because $QSAT$ is \textbf{PSPACE}-complete and $\overline{HAMILTON \; PATH}$ is $\Pi_2\mathbf{P}$-complete. We know that $\Pi_2\mathbf{P}\subseteq\textbf{PSPACE}$.
+\end{itemize}
+
+
