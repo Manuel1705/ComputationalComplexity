@@ -145,4 +145,33 @@ This logic is very flexible, even if we assume $\neg\text{dead}_3$ this makes $\
     Deciding whether KB $\vDash_M \phi$ is $\Pi_2\mathbf{P}$-complete.
 \end{defbox}
 Notice that CIRC SAT $\eqsim$ SAT + minimization of abnormality predicates. As often happens, the complexity of the problem increases when we try to optimize (in this case with minimization) the solution.
-
+The quantified Boolean formulae (QBF) are propositional fragment of the 2° order logic, that is the logic that allows to quantify over the propositional symbols. E.g. $\forall p \exists q.\; \neg p\lor q$ is a QBF. To express the concept of VALIDITY we have something like $\forall p\forall q.\;\neg p\lor p\lor q$. To express satisfiability we have something like $\exists p\exists q.\; p\land q$. To say that a formula in not valid we can say $\forall p\forall q.\; p\lor q$. To say that a formula is not satisfiable we can say $\exists p\exists q.\; p\land \neg p\land q$. In addition to SAT and VALIDITY (1° level) the QBF can express also Circumscription (2° level). For more details refer to the slides. Consequence: The QBF of the form $\exists \vec{x}\forall \vec{y}.\; \phi$ are hard for $\Sigma_2\mathbf{P}$ and the QBF formulae of the form $\forall \vec{x}\exists \vec{y}.\; \phi$ are hard for $\Pi_2\mathbf{P}$. We notice that the number of alternated quantifiers corresponds to the level of the polynomial hierarchy in which the problem is located. Now we give the definition of $QSAT_i$ which is $\Sigma_i\mathbf{P}$-complete.\\
+\begin{defbox}[$QSAT_i$]
+    Given a QBF with $i$ alternated quantifiers
+    \[
+\exists p_{1,1} \dots \exists p_{1,n_1} \; \forall p_{2,1} \dots \forall p_{2,n_2} \; \exists p_{3,1} \dots \phi
+\]
+ more concisely represented as
+ \[
+\exists \vec{p}_1 \; \forall \vec{p}_2 \; \exists \vec{p}_3 \dots Q \vec{p}_i \; \phi
+\]
+where $Q$ is $\exists$ if $i$ is odd and $\forall$ if $i$ is even, and where the variables $\vec{p}_1\dots\vec{p}_i$ are all the variables of the formula $\phi$ say if the QBF if true.
+\end{defbox}
+\begin{defbox}[Theorem]
+    $QSAT_i$ is $\Sigma_i\mathbf{P}$-complete.
+\end{defbox}
+\begin{proof}
+omitted
+\end{proof}
+\subsection{Exercise}
+Tell if there exist a reduction between the following problems:
+\begin{itemize}
+    \item $\mathbf{QSAT_2 \; e \; QSAT_4}$
+    \item $\mathbf{QSAT_i \; e \; \overline{QSAT_i}}$
+    \item $\mathbf{CLIQUE \; e \; QSAT_1}$
+    \item $\mathbf{CLIQUE \; e \; QSAT_2}$
+    \item $\mathbf{CLIQUE \; e \; \overline{QSAT_1}}$
+    \item $\mathbf{CLIQUE \; e \; \overline{QSAT_2}}$
+    \item $\mathbf{SAT-UNSAT \; e \; QSAT_3}$
+    \item $\mathbf{SAT-UNSAT \; e \; \overline{QSAT_3}}$
+\end{itemize}
