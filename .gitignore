@@ -2,3 +2,4 @@
 .vscode/
 *.fls
 *.gz
+*.aux
