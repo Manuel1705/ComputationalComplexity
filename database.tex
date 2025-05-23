@@ -1,0 +1,18 @@
+\section{Database queries}
+\subsection{Complexity measures}
+There are different complexity measures for the queries:
+\textbf{Combined Complexity} where both the queries and the database are part of the input; \textbf{Data complexity} where only the database is part of the input (we consider the size of the query negligible); \textbf{Expression complexity} where only the query is part of the input (given a database we want to analyze what happens what happens as the query complexity increases)
+\begin{defbox}[Theorem]
+    \begin{itemize}
+        \item Combined complexity: \textbf{PSPACE}-complete
+        \item Expression complexity: \textbf{PSPACE}-complete
+        \item Data complexity: \textbf{L}-complete $(\textbf{L}\subseteq \textbf{P})$
+    \end{itemize}
+\end{defbox}
+The \textbf{congiuntive queries} are queries without unions and negations. When we only use this type of queries, the complexity is: 
+\begin{itemize}
+        \item Combined complexity: \textbf{NP}-complete
+        \item Expression complexity: \textbf{NP}-complete
+        \item Data complexity: $\textbf{AC}_0-complete(\textbf{AC}_0\subseteq\textbf{L}\subseteq \textbf{P})$
+\end{itemize}
+
