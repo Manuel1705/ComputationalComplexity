@@ -1,2 +1,77 @@
 \section{Cryptography}
 The cryptographic functions to encrypt and decrypt messages used today are not scure in the absolute sense. They are based on mathematical functions that are easy to compute in one direction, but hard to compute in the other direction. It could be possibile to break the security even without knowing the key. The security of the system is based on the fact that finding the key is computationally infeasible in a reasonable time. The problem of breaking the cipher belong to a complexity class that is strictly bigger than P. Encrypting and decrypting a message are not decision problems, so they belong to a specific complexity class. The existing condition of the cryptographic function is not related to the $P\not= NP$ hypothesis but on the hypothesis that $P\not= UP$, where $UP$ is a subclass of $NP$.
+\subsection{Function problems}
+Remember that a decision problem $L$ is in \textbf{NP} iff there exist a relation $R_L$ polynomially balanced and decidable in polynomial time such that:
+$$
+L=\{x\;|\; \exists y such that (x,y)\in R_L\}
+$$
+The certificate $y$ represents a solution to the instance $x$.
+\begin{defbox}[Function problme]
+    Given an instance $x$ of $L$, finding a string $y$ such that $(x,y)\in R_L$ is called a \textbf{function problem}. If there is no solution, the function returns \dquote{no}.
+\end{defbox}
+\begin{defbox}[FNP]
+    The class of function problems FL such that $L\in NP$ is called \textbf{FNP}. 
+\end{defbox}
+\begin{defbox}[FP]
+    The class of function problems FL such that $L\in P$ is called \textbf{FP}.
+\end{defbox}
+Clearly, $FP\subseteq FNP$. With the use of oracles, we can define the functional class of $PH$.
+To reduce a functional problem $A$ to a functional problem $B$, it's not enough to transform the instance of $A$ into an instance of $B$. We also need to transform the solution for $B$ into a solution for $A$. 
+\begin{defbox}[Reduction for function problems]
+    A function problem $A$ is \textbf{reducible} to a function problem $B$ if there exist two functions $R$ and $S$ such that:
+    \begin{itemize}
+        \item $R$ and $S$ are computable in logarithmic space
+        \item if $x$ is an instance of $A$, then $R(x)$ is an instance of $B$
+        \item the answer to $X$ is \dquote{no} iff the answer to $R(x)$ is \dquote{no}
+        \item if $y$ is a solution for $R(x)$, then $S(y)$ is a solution for $x$
+    \end{itemize}
+\end{defbox}
+\begin{defbox}[Completeness for function problems]
+    A problem $A$ is \textbf{complete} for a class of function problems $FC$ iff:
+    \begin{itemize}
+        \item $A$ is in $FC$
+        \item for every problem $B$ in $FC$, $B$ is reducible to $A$
+    \end{itemize}
+\end{defbox}
+One problem that is complete for \textbf{FNP} is \textbf{FSAT}.
+That is the problem of finding a truth assignment that satisfies a boolean formula.
+
+\newpage
+\subsection{\textcolor{red}{FSAT and SAT}}
+\begin{defbox}[\textcolor{red}{Proposition (Relation between FSAT and SAT)}]
+    \textbf{FSAT} can be solved in polynomial time if and only if \textbf{SAT} can be solved in polynomial time.
+\end{defbox}
+\begin{proof}
+Given a deterministic turing machine $M$ that solves \textbf{FSAT} in polynomial time, we can construct a deterministic turing machine $M'$ that solves \textbf{SAT} in polynomial time. The machine $M'$ will be just like $M$, except that every time $M$ outputs a solution, $M'$ will output \dquote{yes}. We just need to ignore the solution. Now let's prove the other direction. Given a deterministic algorithm $A$ that solves \textbf{SAT} in polynomial time, we can construct a deterministic algorithm $A'$ that solves \textbf{FSAT} in polynomial time that works as follows:
+
+\begin{algorithm}
+\caption{Truth Assignment Algorithm}
+\begin{algorithmic}[1]
+\State \textbf{Input:} $\phi(x_1, \ldots, x_n)$
+\State \textbf{Output:} truth assignment $T$ or \texttt{"no"}
+\\
+\If{$A(\phi(x_1, \ldots, x_n)) = \texttt{"no"}$}
+    \State \Return \texttt{"no"}
+\EndIf
+\For{$i = 1$,\dots,$n$}
+    \If{$A(\phi(T[1], \ldots, T[i-1], \text{true}, x_{i+1}, \ldots, x_n)) = \texttt{"yes"}$}
+        \State $T[i] = \text{true}$
+    \Else
+        \State $T[i] = \text{false}$
+    \EndIf
+\EndFor
+\State \Return $T$
+\end{algorithmic}
+\end{algorithm}
+\end{proof}
+\begin{defbox}[Theorem]
+    $$\textbf{FP}=\textbf{FNP} \iff \textbf{P}=\textbf{NP}$$
+\end{defbox}
+\begin{proof}
+    If $\textbf{P}=\textbf{NP}$ then the function problems associated to \textbf{P} and \textbf{NP} are the same. So, $\textbf{FP}=\textbf{FNP}$.
+    If $\textbf{FP}=\textbf{FNP}$, then \textbf{FSAT} can be solved deterministically in polynomial time. Then for what we demonstrated before, \textbf{SAT} can be solved in deterministic polynomial time. Sine this means that an \textbf{NP}-complete problem is in \textbf{P}, then \textbf{P}=\textbf{NP}. 
+\end{proof}
+
+\newpage
+\subsection{One-way functions in cryptography}
+
