@@ -287,7 +287,7 @@ Suppose that $M=(K,\Sigma,\delta,s)$; We shall describe $M'=(K',\Sigma',\delta',
 \subsection{Linear Speedup Theorem}
 As a result of this theorem, we have that e.g. 
 $$\text{if } L\in\textbf{TIME}(150n^2) \text{ then } L\in\textbf{TIME}(n^2 + n +2)$$  
-From this we can conclude that, $O()$ is the only significative notation for time complexity.
+From this we can conclude that, $O$ is the only significative notation for time complexity.
 \begin{defbox}[Linear Speedup Theorem]
   Let $L\in\textbf{TIME}(f(n))$. Then, for any $\epsilon>0$, $L\in\textbf{TIME}(f'(n))$, where $$f'(n) = \epsilon f(n)+n+2$$ 
 \end{defbox}
@@ -400,11 +400,11 @@ The set of language decided by nondeterministic Turing machines within time $f$ 
   It would be remarkable if we could somehow turn this nondeterministic idea into a viable, polynomial-time algorithm for $\text{TSP (D)}$. Unfortunately, at present we know of only exponential general methods for turning a nondeterministic algorithm into a deterministic one. We describe the most obvious such method next.
 
 \begin{defbox}[Theorem (from nondeterministic to deterministic)]
-  Suppose that language $L$ is decided by a nondeterministic Turing machine $N$ in time $f(n)$. Then it is decided by a 3-string deterministic Turing machine $M$ in time $\mathcal{O}(cf(n))$, where $c > 1$ is some constant depending on $N$.
+  Suppose that language $L$ is decided by a nondeterministic Turing machine $N$ in time $f(n)$. Then it is decided by a 3-string deterministic Turing machine $M$ in time $\mathcal{O}(c^{f(n)})$, where $c > 1$ is some constant depending on $N$.
 
 Notice that, using complexity class notation, we can restate this result very succinctly:
 \[
-\textbf{NTIME}(f(n)) \subseteq \bigcup_{c > 1} \textbf{TIME}(cf(n))
+\textbf{NTIME}(f(n)) \subseteq \bigcup_{c > 1} \textbf{TIME}(c^{f(n)})
 \]
 \end{defbox}
 \begin{proof}
