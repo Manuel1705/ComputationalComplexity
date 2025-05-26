@@ -7,6 +7,13 @@
 \newtheorem*{proposition}{Proposition}
 \usepackage{geometry}
 \usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=black,       % color of internal links (e.g., sections, table of contents)
+    citecolor=black,       % color of citation links
+    filecolor=black,       % color of file links
+    urlcolor=black         % color of external links
+}
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{enumitem}
@@ -716,7 +723,7 @@ Total space used: $$\lceil \log n \rceil\cdot 3\log n+\log n = O(\log^2n)$$
   $$\textbf{NSPACE}(f(n))\subseteq\textbf{SPACE}(f^2(n))$$
 \end{defbox}
 \begin{proof}
-  We can solve reachability on the graph configurations using the Savitch's algorithm and then we can generate the configurations graph to save space. The space required is:
+  We can solve reachability on the graph configurations using the Savitch's algorithm and then we can generate the configurations graph to save space. The configuration graph has $c^{f(n)}$ nodes for some constant $c$ so the space required is:
   $$\log^2(c^{f(n)})=(\log(c^{f(n)}))^2=O(f(n)^2)=O(f^2(n))$$
 \end{proof}
 \begin{defbox}[\textcolor{red}{Corollary}]
