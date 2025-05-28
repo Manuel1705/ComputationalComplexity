@@ -733,9 +733,9 @@ Total space used: $$\lceil \log n \rceil\cdot 3\log n+\log n = O(\log^2n)$$
 \end{defbox}
 
 \section{Reductions}
-Like all complexity classes, $\mathbf{NP}$ contains an infinity of languages. Of the problems and languages we have seen so far, $\mathbf{NP}$ contains \textsc{TSP (D)} and the \textsc{SAT} problem for Boolean expressions. In addition, $\mathbf{NP}$ certainly contains \textsc{REACHABILITY} and \textsc{CIRCUIT VALUE}, both of which are in $\mathbf{P}$ and thus in $\mathbf{NP}$.
+Like all complexity classes, $\mathbf{NP}$ contains an infinity of languages. Of the problems and languages we have seen so far, $\mathbf{NP}$ contains \textsc{TSP(D)} and the \textsc{SAT} problem for Boolean expressions. In addition, $\mathbf{NP}$ certainly contains \textsc{REACHABILITY} and \textsc{CIRCUIT VALUE}, both of which are in $\mathbf{P}$ and thus in $\mathbf{NP}$.
 
-However, it is intuitively clear that the former two problems (\textsc{TSP (D)} and \textsc{SAT}) are somehow more representative of the complexity of $\mathbf{NP}$ than the latter two. They seem to capture more faithfully the power and complexity of $\mathbf{NP}$, and are not known (or believed) to be in $\mathbf{P}$ like the other two.
+However, it is intuitively clear that the former two problems (\textsc{TSP(D)} and \textsc{SAT}) are somehow more representative of the complexity of $\mathbf{NP}$ than the latter two. They seem to capture more faithfully the power and complexity of $\mathbf{NP}$, and are not known (or believed) to be in $\mathbf{P}$ like the other two.
 
 To formalize the notion of one problem being ``at least as hard as'' another, we introduce the concept of \emph{reduction}. We say that problem $A$ is at least as hard as problem $B$ if $B$ reduces to $A$. That is, there is a transformation $R$ which, for every input $x$ of $B$, produces an equivalent input $R(x)$ of $A$, such that the answer to $R(x)$ for $A$ is the same as the answer to $x$ for $B$. In other words, to solve $B$ on input $x$, we just have to compute $R(x)$ and solve $A$ on it.
 \begin{figure}[ht]
@@ -801,12 +801,12 @@ It is not certain that every class $C$ contains a \emph{C-complete} language, bu
 \begin{proof}
   For the sake of contradiction, suppose that $L'\in C_2\smallsetminus C_1$. For the hypothesis of \emph{$C_2$-completeness}, $L'$ can be reduces to $L\in C_1$. Then for the hypothesis of closure of $C_1$, $L'\in C_1$ which is a contradiction. 
 \end{proof}
-\subsection{Cook-Levine Theorem}
-\begin{defbox}[Cook-Levine Theorem]
+\subsection{\textcolor{red}{Cook-Levine Theorem}}
+\begin{defbox}[\textcolor{red}{Cook-Levine Theorem}]
   \textsc{SAT} is \textbf{NP}-complete.
 \end{defbox}
 \begin{proof}
-  We know that given a satisfiable boolean expression exists a nondeterministic turing machine that is able to find and verify a satisfying assignment in polynomial time. So we have that \textsc{SAT} is in \textbf{NP}. The computation can be represented as a square table with $p(n)$ rows and columns called computation table.  This matrix cab be represented as propositional formula in CNF. We will have a symbol for each cell of the table. Let $\{q_1,\dots,q_r\}$ the states of $M$ and $\{\sigma_1,\dots,\sigma_l\}$ the symbols of the alphabet. For every step $t$ (row) end every cell $s$ (column), that is $(t,s)$ is a coordinate of a cell in the table, we will have:
+  We know that given a satisfiable boolean expression exists a nondeterministic turing machine that is able to find and verify a satisfying assignment in polynomial time. So we have that \textsc{SAT} is in \textbf{NP}. The computation can be represented as a square table with $p(n)$ rows and columns called computation table.  This matrix can be represented as a propositional formula in CNF. We will have a symbol for each cell of the table. Let $\{q_1,\dots,q_r\}$ the states of $M$ and $\{\sigma_1,\dots,\sigma_l\}$ the symbols of the alphabet. For every step $t$ (row) end every cell $s$ (column), that is $(t,s)$ is a coordinate of a cell in the table, we will have:
   \begin{itemize}
     \item $P^i_{s,t}$ (true if cell $(s,t)$ contains symbol $\sigma_i$) $1\le i\le l$
     \item $Q^i_{t}$ (true if the state $q$ at time $t$ is $q_i$) $1\le i\le r$
@@ -844,7 +844,7 @@ $$Q^1_1\land S_{1,1}\land P^{i_1}_{1,1}\land P^{i_2}_{2,1}\land\dots\land P^{i_n
   equivalent to the CNF:
   $$\neg Q^i_t\land \neg S_{s,t}\land \neg P^j_{s,t}\land\neg Q^k_{t+1}\land \neg P^m_{s,t+1}\land \neg S_{s-1,t+1}$$
 For exercise write the remaining clauses corresponding to the moves $\ra$ e $-$.\\
-The reduction $R(x)$ is the \emph{and} of all the clauses above.
+The reduction $R(x)$ is the \emph{AND} of all the clauses above.
 The problem is in \textbf{NP}: Given a satisfiable Boolean expression, a nondeterministic machine can ``guess'' the satisfying truth assignment and verify it in polynomial time. Since we know that \textsc{CIRCUIT SAT} reduces to \textsc{SAT}, we need to show that all languages in $\mathbf{NP}$ can be reduced to \textsc{CIRCUIT SAT}.
 
 Let $L \in \mathbf{NP}$. We shall describe a reduction $R$ which for each string $x$ constructs a circuit $R(x)$ (with inputs that can be either variables or constants) such that $x \in L$ if and only if $R(x)$ is satisfiable. Since $L \in \mathbf{NP}$, there is a nondeterministic Turing machine $M = (K, \Sigma, \Delta, s)$ that decides $L$ in time $n^k$. That is, given a string $x$, there is an accepting computation (sequence of nondeterministic choices) of $M$ on input $x$ if and only if $x \in L$. We assume that $M$ has a single string; furthermore, we can assume that it has at each step \emph{two nondeterministic choices}.
@@ -890,7 +890,7 @@ in polynomial time.
 \begin{defbox}[Polynomially balanced relations]
   We say that $R$ is \textbf{polynomially balanced} if $(x, y) \in R$ implies $|y| \leq |x|^k$ for some $k \geq 1$. That is, the length of the second component is always bounded by a polynomial in the length of the first (the other way is not important).
 \end{defbox}
-\begin{defbox}[Proposition]
+\begin{defbox}[\textcolor{red}{Proposition 9.1}]
   Let $L \subseteq \Sigma^*$ be a language. $L \in \textbf{NP}$ if and only if there is a polynomially decidable and polynomially balanced relation $R$, such that 
 \[
 L = \{x : (x, y) \in R \text{ for some } y\}.
