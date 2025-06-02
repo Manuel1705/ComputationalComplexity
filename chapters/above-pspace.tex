@@ -1,0 +1,11 @@
+\section{Above PSPACE}
+\subsection{\textcolor{red}{Theorem 20.1}}
+\begin{defbox}[\textcolor{red}{Theorem 20.1}]
+If \textbf{P}=\textbf{NP} then \textbf{EXP}=\textbf{NEXP}    
+\end{defbox}
+\begin{proof}
+    Let $L\in\textbf{NEXP}$, by definition there exist a nondeterministic TM $N$ that decides $L$ in time $2^{n^k}$.
+    Let $L'$ be a langue that enlarges the instances of $L$ exponentially with a new symbol $\sqcap$ called semi-blank.
+    $$L' = \left\{ x \sqcap^{2^{|x|^k} - |x|} \;\middle|\; x \in L \right\}$$   
+    The semi-blanks enlarge every $x$ to $2^{|x|^k}$ characters. Let first show that $L'\in \textsl{NP}$ using a nondeterministic TM $N'$ obtained from $N$. $N'$ first checks that the input $y$ is well formed, that is $x\sqcap^{2^{|x|^k}}-|x|$ where $x$ does not contain $\sqcap$ (otherwise rejects), then simulates $N$ using $\sqcap$ as it would be $\sqcup$. $N'$ runs in polynomial time thanks to the enlargement of $x$. Since $L'\in \textsl{NP}$ and for hypothesis we have P=NP, we have $L'\in\textsl{P}$. So there must exist a deterministic TM $M'$ that decides $L'$ in polynomial time $n^l$. Then we construct a deterministic TM $M$ based on $M'$ that decides $L$ in exponential time. This will prove that $L\in\textsl{EXP}$ ending the proof. $M$ extends $x$ with $\sqcap$ until it reaches length $2^{|x|^k}$, then executes the instructions of $M'$ on the input. The time required is indeed exponential since the phase 1 takes $O(p(|x|)\cdot2^{|x|^k})=O(2^{|x|^{k+j}})$ for some $j$ where $p$ is the polynomial time require to manipulate the counters and the phase 2 takes $(2^{|x|^k})^l = O(2^{|x|^k+l})$. 
+\end{proof}
