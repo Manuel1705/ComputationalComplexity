@@ -271,7 +271,7 @@ Suppose that $M=(K,\Sigma,\delta,s)$; We shall describe $M'=(K',\Sigma',\delta',
   $M'$ single string must "simulate" the $k$ strings of $M$. 
   
   One way to do this would be to maintain in $M'$'s string the concatenation of the strings of $M$ (without, of course the $\tr_s$ that would come in the way of going back and forth in the string). We must also "remember" the position of each cursor, as well as the current right end of each string.
-  To accomplish all this, we let $$\Sigma'=\Sigma\cup\uSigma\cup\{\tr',\tl\}$$ Here $\uSigma=\{\usigma:\sigma\in\Sigma\}$ is a set of cursor versions of the symbol in $\Sigma$.
+  To accomplish all this, we let $$\Sigma'=\Sigma\cup\uSigma\cup\{\tr',\tl\, \tl'\}$$ Here $\uSigma=\{\usigma:\sigma\in\Sigma\}$ is a set of cursor versions of the symbol in $\Sigma$.
   $\tr'$ is a new version of $\tr$ which can be passed over to the left, and $\tl$ marks the right end of a string.
   
   Thus, any configuration $(q,w_1,u_1,\dots,w_k,u_k)$ can be simulated by the configurations of $M'$ $(q,\tr,w_1'u_1\tl w_2'u_2\tl\dots w_k'u_k\tl\tl)$. Here $w_i'$ is $w_i$ with the leading $\triangleright$ replaced by $\triangleright'$, and the last symbol $\sigma_i$ by $\underline{\sigma_i}$. The last two $\triangleleft$s signal the end of $M'$'s string.
