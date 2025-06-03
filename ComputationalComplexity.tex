@@ -1205,7 +1205,7 @@ If $L$ is \textsc{NP}-complete, then its complement $\overline{L} = \Sigma^* - L
 \end{proof}
 
 \begin{defbox}[\textcolor{red}{Proposition D}]
-  If \C is closed under reduction and a \C-complete problem is in \coC then \C=\coC
+  If $C$ is closed under reduction and a \C-complete problem is in \coC then \C=\coC
 \end{defbox}
 \begin{proof}
   Let $L\in\coC$ be a \C-complete problem. Let first prove that $\C\subseteq\coC$. For every $L'\in\C$, there exists a reduction $R$ from $L'$ to $L$ (because $L$ is \C-complete). Since $L\in\coC$ and co\textsc{C} is closed under reduction for proposition C, then $L'\in\coC$. So $\C\subseteq\coC$. Since $L$ is \C-complete, we have that $\overline{L}\in\coC$ is \coC-complete for proposition B. Since $L'\in\coC$, there exist a reduction $R: L'\to\overline{L}$. We know that $L\in\C$ because $L$ is \C-complete and $L\in\coC$ for hypothesis. So $L\in\C\cap\coC$. For this we can also say that $\overline{L}\in\C\cap\coC$. Since there is a reduction $R: L'\to\overline{L}$ then $L'\in\C$. So $\coC\subseteq\C$. We have that $\C\subseteq\coC$ and $\coC\subseteq\C$ so $\C=\coC$. 
