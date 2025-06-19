@@ -461,11 +461,11 @@ $n$,
 (s, \triangleright, x, \triangleright, \epsilon, \ldots, \triangleright, \epsilon) 
 \xrightarrow{M_f^t} 
 (h, x, \triangleright, \sqcup^{j_2}, \triangleright, \sqcup^{j_3}, \ldots, 
-\triangleright, \sqcup^{j_{k-1}}, \triangleright, \sqcup^{f(|x|)}),
+\triangleright, \sqcup^{j_{k-1}}, \triangleright, \sqcap^{f(|x|)}),
 \]
 such that $t = O(n + f(n))$, and the $j_i = O(f(|x|))$ for $i = 2, \ldots, k - 1$, with $t$ and the 
 $j_i$'s depending only on $n$. In other words, on input $x$, $M_f$ computes the string 
-$\sqcup^{f(|x|)}$, where $\sqcup$ is a ``quasi-blank'' symbol. And, on any input $x$, $M_f$ halts after 
+$\sqcap^{f(|x|)}$, where $\sqcap$ is a ``quasi-blank'' symbol. And, on any input $x$, $M_f$ halts after 
 $O(|x| + f(|x|))$ steps and uses $O(f(|x|))$ space besides its input. \qed
 \end{defbox}
 Using only proper complexity functions we can standardize the behavior of Turing machines.
