@@ -282,7 +282,7 @@ Suppose that $M=(K,\Sigma,\delta,s)$; We shall describe $M'=(K',\Sigma',\delta',
   
   To simulate a move of $M$, $M'$ scans twice its string from left to right and back. In the first scan, $M'$ gathers information concerning the $k$ currently scanned symbols in $M$: They are the $k$ underlined symbols encountered. To do this ``remembering,'' $M'$ must contain new states, each of which corresponds to a particular combination of a state of $M$ and of a $k$-tuple of symbols of $M$.
   
-  Based on its state at the end of the first scan, $M'$ knows what changes need to be performed on the string to reflect changes in the strings of $M$ at the move being simulated. Then $M'$ scans its string again from left to right, stopping at each underlined symbol to rewrite one or two symbols nearby, in a manner that reflects the symbols overwritten and the cursor motions of $M$ at this string during this move. These updates can be easily performed based on the information available to $M'$.
+  Based on its state at the end of the first scan, $M'$ knows what changes needs to be performed on the string to reflect changes in the strings of $M$ at the move being simulated. Then $M'$ scans its string again from left to right, stopping at each underlined symbol to rewrite one or two symbols nearby, in a manner that reflects the symbols overwritten and the cursor motions of $M$ at this string during this move. These updates can be easily performed based on the information available to $M'$.
 
   There is however one complication: If a cursor scanning the right end of a string needs to move right, we must create space for a new symbol (a $\sqcup$). This is done by first marking the currently scanned $\lhd$ by a special mark, making it $\lhd'$, moving $M'$'s cursor all the way to the $\lhd$ on the right end, and moving all symbols one position to the right, as was done by the Turing machine in Example 2.1. When the $\lhd'$ is encountered, it is moved to the right as a simple $\lhd$, and a $\sqcup$ is overwritten in its old position. Then we go on to implement the changes in the next string of $M$.
   
@@ -493,7 +493,7 @@ If $M$ decides $L$ in space $f(n)$, with $f$ being a proper function then exists
 \end{defbox}
 \begin{proof}
   If $M$ works in space $f(n)$, then the set of different configurations in which it can go through is finite. 
-  Upper bounder by 
+  Upper bounded by 
   $$c=|K|\times|\Sigma|^{f(n)}\times (f(n)+1)$$
   If $M$ makes more than $c$ steps, then it must have repeated a configuration and so it must be in a loop. If $M$ doesn't halt in at most $c$ steps we can force termination in "no".
   Proof for 1 tape: concatenates $M_f$ and a simulation of $M$. The last tape of $M_f$ is used as a yardstick. This tape will contain a cell in which we have the symbol representing the current state, it can contain $|K|$ different symbols. Then the next $f(n)$ cells will contain the symbols of $\Sigma$ (represented by an integer in base $|\Sigma|$). The last ($f(n)+1$) cells will be used as an unary representation of the cursor position.
